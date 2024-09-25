@@ -25,6 +25,11 @@ public class DailyRecordController {
         this.dailyRecordService = dailyRecordService;
     }
 
+    /**
+     * 记一笔
+     * @param query
+     * @return
+     */
     @PostMapping("/save")
     public DailyRecord save(@RequestBody DailyRecord query){
         query.setId(IdUtil.getSnowflakeNextId());
