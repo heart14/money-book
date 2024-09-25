@@ -1,6 +1,7 @@
 package com.liiwe.moneybook.base.bean.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class DailyRecord {
 
     private Long id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     private String title;
@@ -29,10 +31,12 @@ public class DailyRecord {
 
     private String category;
 
-    private String desc;
+    private String remark;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String username;
