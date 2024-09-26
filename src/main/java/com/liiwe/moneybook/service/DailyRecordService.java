@@ -1,6 +1,9 @@
 package com.liiwe.moneybook.service;
 
 import com.liiwe.moneybook.base.bean.entity.DailyRecord;
+import com.liiwe.moneybook.base.bean.request.DailyRecordQueryRequest;
+
+import java.util.List;
 
 /**
  * @author wfli
@@ -9,4 +12,6 @@ import com.liiwe.moneybook.base.bean.entity.DailyRecord;
 public interface DailyRecordService {
 
     DailyRecord save(DailyRecord record);
+
+    List<DailyRecord> query(DailyRecordQueryRequest request);
 }

@@ -20,8 +20,7 @@ public class DailyRecord {
 
     private Long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private String date;
 
     private String title;
 

@@ -1,9 +1,14 @@
 package com.liiwe.moneybook.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liiwe.moneybook.base.bean.entity.DailyRecord;
+import com.liiwe.moneybook.base.bean.request.DailyRecordQueryRequest;
 import com.liiwe.moneybook.mapper.DailyRecordMapper;
 import com.liiwe.moneybook.service.DailyRecordService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author wfli
@@ -22,5 +27,15 @@ public class DailyRecordServiceImpl implements DailyRecordService {
     public DailyRecord save(DailyRecord record) {
         dailyRecordMapper.insert(record);
         return dailyRecordMapper.selectById(record.getId());
+    }
+
+    @Override
+    public List<DailyRecord> query(DailyRecordQueryRequest request) {
+        LambdaQueryWrapper<DailyRecord> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(StrUtil.isNotBlank(request.getDate()), DailyRecord::getDate, request.getDate())
+                .eq(StrUtil.isNotBlank(request.getType()), DailyRecord::getType, request.getType())
+                .eq(StrUtil.isNotBlank(request.getCategory()), DailyRecord::getCategory, request.getCategory())
+                .eq(StrUtil.isNotBlank(request.getUsername()), DailyRecord::getUsername, request.getUsername());
+        return dailyRecordMapper.selectList(wrapper);
     }
 }
