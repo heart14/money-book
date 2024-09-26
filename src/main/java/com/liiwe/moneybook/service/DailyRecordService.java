@@ -2,6 +2,7 @@ package com.liiwe.moneybook.service;
 
 import com.liiwe.moneybook.base.bean.entity.DailyRecord;
 import com.liiwe.moneybook.base.bean.request.DailyRecordQueryRequest;
+import com.liiwe.moneybook.base.bean.request.DailyRecordSaveRequest;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface DailyRecordService {
 
-    DailyRecord save(DailyRecord record);
+    DailyRecord save(DailyRecordSaveRequest request);
 
     List<DailyRecord> query(DailyRecordQueryRequest request);
 }

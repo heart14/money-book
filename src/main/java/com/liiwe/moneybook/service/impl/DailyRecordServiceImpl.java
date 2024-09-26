@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liiwe.moneybook.base.bean.entity.DailyRecord;
 import com.liiwe.moneybook.base.bean.request.DailyRecordQueryRequest;
+import com.liiwe.moneybook.base.bean.request.DailyRecordSaveRequest;
 import com.liiwe.moneybook.mapper.DailyRecordMapper;
 import com.liiwe.moneybook.service.DailyRecordService;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,10 @@ public class DailyRecordServiceImpl implements DailyRecordService {
     }
 
     @Override
-    public DailyRecord save(DailyRecord record) {
-        dailyRecordMapper.insert(record);
-        return dailyRecordMapper.selectById(record.getId());
+    public DailyRecord save(DailyRecordSaveRequest request) {
+        DailyRecord dailyRecord = new DailyRecord(request);
+        dailyRecordMapper.insert(dailyRecord);
+        return dailyRecordMapper.selectById(dailyRecord.getId());
     }
 
     @Override

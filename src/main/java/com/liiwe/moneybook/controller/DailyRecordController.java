@@ -4,7 +4,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.liiwe.moneybook.base.bean.entity.DailyRecord;
 import com.liiwe.moneybook.base.bean.request.DailyRecordQueryRequest;
+import com.liiwe.moneybook.base.bean.request.DailyRecordSaveRequest;
 import com.liiwe.moneybook.service.DailyRecordService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +30,12 @@ public class DailyRecordController {
 
     /**
      * 记一笔
-     * @param query
+     * @param request
      * @return
      */
     @PostMapping("/save")
-    public DailyRecord save(@RequestBody DailyRecord query) {
-        query.setId(IdUtil.getSnowflakeNextId());
-        query.setDate(DateUtil.format(new Date(), "yyyy-MM-dd"));
-        query.setCreateTime(DateUtil.date());
-        return dailyRecordService.save(query);
+    public DailyRecord save(@Valid @RequestBody DailyRecordSaveRequest request) {
+        return dailyRecordService.save(request);
     }
 
     /**
