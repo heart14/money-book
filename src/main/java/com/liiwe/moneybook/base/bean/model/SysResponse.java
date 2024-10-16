@@ -19,11 +19,11 @@ public class SysResponse {
 
     private Object data;
 
-    public static SysResponse success(Object data){
+    public static SysResponse success(Object data) {
         return new SysResponse(200, "SUCCESS", data);
     }
 
-    public static SysResponse fail(String msg){
+    public static SysResponse fail(String msg) {
         return new SysResponse(201, msg, null);
     }
 }

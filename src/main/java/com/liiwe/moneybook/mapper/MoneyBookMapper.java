@@ -1,7 +1,7 @@
 package com.liiwe.moneybook.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.liiwe.moneybook.base.bean.entity.DailyRecord;
+import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024/9/25 18:38
  */
 @Mapper
-public interface DailyRecordMapper extends BaseMapper<DailyRecord> {
+public interface MoneyBookMapper extends BaseMapper<MoneyBookRecord> {
 
 }

@@ -22,6 +22,9 @@ public class GlobalExceptionHandler {
         return SysResponse.fail(e1.getMessage());
     }
 
+    /**
+     * 参数校验异常
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public SysResponse handleValidationExceptions(MethodArgumentNotValidException e2) {
         Map<String, String> errors = new HashMap<>();

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyRecordSaveRequest {
+public class SaveRecordRequest {
 
     private String date;
 
