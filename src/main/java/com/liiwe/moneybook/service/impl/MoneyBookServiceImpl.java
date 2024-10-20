@@ -33,15 +33,6 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
-    public void upload(List<RecordExcel> records) {
-        MoneyBookRecord moneyBookRecord;
-        for (RecordExcel record : records) {
-            moneyBookRecord = new MoneyBookRecord(record);
-            moneyBookMapper.insert(moneyBookRecord);
-        }
-    }
-
-    @Override
     public List<MoneyBookRecord> query(QueryRecordRequest request) {
         LambdaQueryWrapper<MoneyBookRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.likeRight(StrUtil.isNotBlank(request.getByYear()), MoneyBookRecord::getDate, request.getByYear())
@@ -51,5 +42,14 @@ public class MoneyBookServiceImpl implements MoneyBookService {
                 .eq(StrUtil.isNotBlank(request.getCategory()), MoneyBookRecord::getCategory, request.getCategory())
                 .eq(StrUtil.isNotBlank(request.getUsername()), MoneyBookRecord::getUsername, request.getUsername());
         return moneyBookMapper.selectList(wrapper);
+    }
+
+    @Override
+    public void upload(List<RecordExcel> records) {
+        MoneyBookRecord moneyBookRecord;
+        for (RecordExcel record : records) {
+            moneyBookRecord = new MoneyBookRecord(record);
+            moneyBookMapper.insert(moneyBookRecord);
+        }
     }
 }

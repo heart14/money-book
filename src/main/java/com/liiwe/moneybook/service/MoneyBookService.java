@@ -14,17 +14,11 @@ import java.util.List;
 public interface MoneyBookService {
 
     /**
-     * 保存一笔记账记录
+     * 保存记账记录
      * @param request
      * @return
      */
     MoneyBookRecord save(SaveRecordRequest request);
-
-    /**
-     * 从excel导入记账记录
-     * @param records
-     */
-    void upload(List<RecordExcel> records);
 
     /**
      * 查询记账记录
@@ -32,4 +26,10 @@ public interface MoneyBookService {
      * @return
      */
     List<MoneyBookRecord> query(QueryRecordRequest request);
+
+    /**
+     * 从excel导入记账记录
+     * @param records
+     */
+    void upload(List<RecordExcel> records);
 }

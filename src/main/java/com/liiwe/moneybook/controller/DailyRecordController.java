@@ -3,6 +3,7 @@ package com.liiwe.moneybook.controller;
 import com.alibaba.excel.EasyExcel;
 import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
+import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
 import com.liiwe.moneybook.base.listener.RecordExcelListener;
@@ -34,19 +35,10 @@ public class DailyRecordController {
      * @param request
      * @return
      */
-    @PostMapping("/save")
-    public MoneyBookRecord save(@Valid @RequestBody SaveRecordRequest request) {
-        return moneyBookService.save(request);
-    }
-
-    /**
-     * 保存记账记录
-     * @param request
-     * @return
-     */
     @GetMapping("/record")
-    public MoneyBookRecord record(@Valid SaveRecordRequest request) {
-        return moneyBookService.save(request);
+    public SysResponse record(@Valid SaveRecordRequest request) {
+        MoneyBookRecord record = moneyBookService.save(request);
+        return SysResponse.success(record);
     }
 
     /**
@@ -54,10 +46,10 @@ public class DailyRecordController {
      * @param request
      * @return
      */
-    @PostMapping("/query")
-    public List<MoneyBookRecord> query(@RequestBody QueryRecordRequest request) {
+    @GetMapping("/query")
+    public SysResponse query(QueryRecordRequest request) {
         log.info("query:{}",request);
-        return moneyBookService.query(request);
+        return SysResponse.success(moneyBookService.query(request));
     }
 
     /**
