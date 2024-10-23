@@ -29,6 +29,11 @@ public class QueryRecordRequest {
     private String byDate;
 
     /**
+     * 按交易描述查询
+     */
+    private String title;
+
+    /**
      * 按交易类型查询
      */
     private String type;

@@ -38,6 +38,7 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         wrapper.likeRight(StrUtil.isNotBlank(request.getByYear()), MoneyBookRecord::getDate, request.getByYear())
                 .likeRight(StrUtil.isNotBlank(request.getByMonth()), MoneyBookRecord::getDate, request.getByMonth())
                 .eq(StrUtil.isNotBlank(request.getByDate()), MoneyBookRecord::getDate, request.getByDate())
+                .like(StrUtil.isNotBlank(request.getTitle()), MoneyBookRecord::getTitle, request.getTitle())
                 .eq(StrUtil.isNotBlank(request.getType()), MoneyBookRecord::getType, request.getType())
                 .eq(StrUtil.isNotBlank(request.getCategory()), MoneyBookRecord::getCategory, request.getCategory())
                 .eq(StrUtil.isNotBlank(request.getUsername()), MoneyBookRecord::getUsername, request.getUsername());
