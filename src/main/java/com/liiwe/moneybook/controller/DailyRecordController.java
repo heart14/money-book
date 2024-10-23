@@ -4,8 +4,8 @@ import com.alibaba.excel.EasyExcel;
 import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
-import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
+import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.listener.RecordExcelListener;
 import com.liiwe.moneybook.service.MoneyBookService;
 import jakarta.validation.Valid;
@@ -48,8 +48,30 @@ public class DailyRecordController {
      */
     @GetMapping("/query")
     public SysResponse query(QueryRecordRequest request) {
-        log.info("query:{}",request);
+        log.info("query:{}", request);
         return SysResponse.success(moneyBookService.query(request));
+    }
+
+    /**
+     * 查询月支出统计柱状图数据
+     * @param year
+     * @return
+     */
+    @GetMapping("/monthData/{year}")
+    public SysResponse monthData(@PathVariable("year") String year) {
+        log.info("query:{}", year);
+        return SysResponse.success(moneyBookService.queryMonthDataByYear(year));
+    }
+
+    /**
+     * 查询月分类统计表数据
+     * @param year
+     * @return
+     */
+    @GetMapping("/monthCategoryData/{year}")
+    public SysResponse monthCategoryData(@PathVariable("year") String year) {
+        log.info("query:{}", year);
+        return SysResponse.success(moneyBookService.queryMonthCategoryDataByYear(year));
     }
 
     /**

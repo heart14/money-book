@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liiwe.moneybook.mapper.MoneyBookMapper">
+
+    <select id="selectMonthDataByYear" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT DATE_FORMAT(t.`date`, '%Y-%m') "byMonth",SUM(CAST(t.`amount` AS DECIMAL(10, 2))) "totalAmount"
+        FROM `t_money_book_record` t
+        WHERE DATE_FORMAT(t.`date`, '%Y') = #{year}
+        GROUP BY DATE_FORMAT(t.`date`, '%Y-%m')
+    </select>
+
+    <select id="selectMonthCategoryDataByYear" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            category,
+            IFNULL(MAX(CASE WHEN byMonth = '01' THEN categoryTotal ELSE NULL END), 0) AS `01月`,
+            IFNULL(MAX(CASE WHEN byMonth = '02' THEN categoryTotal ELSE NULL END), 0) AS `02月`,
+            IFNULL(MAX(CASE WHEN byMonth = '03' THEN categoryTotal ELSE NULL END), 0) AS `03月`,
+            IFNULL(MAX(CASE WHEN byMonth = '04' THEN categoryTotal ELSE NULL END), 0) AS `04月`,
+            IFNULL(MAX(CASE WHEN byMonth = '05' THEN categoryTotal ELSE NULL END), 0) AS `05月`,
+            IFNULL(MAX(CASE WHEN byMonth = '06' THEN categoryTotal ELSE NULL END), 0) AS `06月`,
+            IFNULL(MAX(CASE WHEN byMonth = '07' THEN categoryTotal ELSE NULL END), 0) AS `07月`,
+            IFNULL(MAX(CASE WHEN byMonth = '08' THEN categoryTotal ELSE NULL END), 0) AS `08月`,
+            IFNULL(MAX(CASE WHEN byMonth = '09' THEN categoryTotal ELSE NULL END), 0) AS `09月`,
+            IFNULL(MAX(CASE WHEN byMonth = '10' THEN categoryTotal ELSE NULL END), 0) AS `10月`,
+            IFNULL(MAX(CASE WHEN byMonth = '11' THEN categoryTotal ELSE NULL END), 0) AS `11月`,
+            IFNULL(MAX(CASE WHEN byMonth = '12' THEN categoryTotal ELSE NULL END), 0) AS `12月`
+        FROM (
+                 SELECT
+                     t.category,
+                     DATE_FORMAT(t.date, '%m') AS byMonth,
+                     SUM(CAST(t.amount AS DECIMAL(10, 2))) AS categoryTotal
+                 FROM
+                     `t_money_book_record` t
+                 WHERE
+                     DATE_FORMAT(t.date, '%Y') = #{year}
+                 GROUP BY
+                     t.category, byMonth
+             ) AS subquery
+        GROUP BY category;
+    </select>
+
+</mapper>

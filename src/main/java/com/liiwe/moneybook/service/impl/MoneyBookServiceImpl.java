@@ -8,15 +8,18 @@ import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wfli
  * @since 2024/9/25 18:46
  */
 @Service
+@Slf4j
 public class MoneyBookServiceImpl implements MoneyBookService {
 
     private final MoneyBookMapper moneyBookMapper;
@@ -52,5 +55,15 @@ public class MoneyBookServiceImpl implements MoneyBookService {
             moneyBookRecord = new MoneyBookRecord(record);
             moneyBookMapper.insert(moneyBookRecord);
         }
+    }
+
+    @Override
+    public List<Map<String, String>> queryMonthDataByYear(String year) {
+        return moneyBookMapper.selectMonthDataByYear(year);
+    }
+
+    @Override
+    public List<Map<String, String>> queryMonthCategoryDataByYear(String year) {
+        return moneyBookMapper.selectMonthCategoryDataByYear(year);
     }
 }

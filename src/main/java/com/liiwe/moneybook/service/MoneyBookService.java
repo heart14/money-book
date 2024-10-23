@@ -6,6 +6,7 @@ import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wfli
@@ -32,4 +33,18 @@ public interface MoneyBookService {
      * @param records
      */
     void upload(List<RecordExcel> records);
+
+    /**
+     * 查询月支出统计柱状图数据
+     * @param year
+     * @return
+     */
+    List<Map<String, String>> queryMonthDataByYear(String year);
+
+    /**
+     * 查询月分类统计表数据
+     * @param year
+     * @return
+     */
+    List<Map<String, String>> queryMonthCategoryDataByYear(String year);
 }
