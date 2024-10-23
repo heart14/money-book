@@ -20,6 +20,9 @@ public interface MoneyBookMapper extends BaseMapper<MoneyBookRecord> {
     List<Map<String,String>> selectMonthDataByYear(@Param("year") String year);
 
     @MapKey("category")
+    List<Map<String,String>> selectCategoryDataByYear(@Param("year") String year);
+
+    @MapKey("category")
     List<Map<String,String>> selectMonthCategoryDataByYear(@Param("year") String year);
 
 }

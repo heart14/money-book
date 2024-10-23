@@ -53,7 +53,7 @@ public class DailyRecordController {
     }
 
     /**
-     * 查询月支出统计柱状图数据
+     * 查询月支出统计图数据
      * @param year
      * @return
      */
@@ -61,6 +61,17 @@ public class DailyRecordController {
     public SysResponse monthData(@PathVariable("year") String year) {
         log.info("query:{}", year);
         return SysResponse.success(moneyBookService.queryMonthDataByYear(year));
+    }
+
+    /**
+     * 查询分类支出统计图数据
+     * @param year
+     * @return
+     */
+    @GetMapping("/categoryData/{year}")
+    public SysResponse categoryData(@PathVariable("year") String year) {
+        log.info("query:{}", year);
+        return SysResponse.success(moneyBookService.queryCategoryDataByYear(year));
     }
 
     /**

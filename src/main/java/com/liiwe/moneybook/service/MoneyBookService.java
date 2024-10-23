@@ -35,11 +35,18 @@ public interface MoneyBookService {
     void upload(List<RecordExcel> records);
 
     /**
-     * 查询月支出统计柱状图数据
+     * 查询月支出统计图数据
      * @param year
      * @return
      */
     List<Map<String, String>> queryMonthDataByYear(String year);
+
+    /**
+     * 查询分类支出统计图数据
+     * @param year
+     * @return
+     */
+    List<Map<String, String>> queryCategoryDataByYear(String year);
 
     /**
      * 查询月分类统计表数据

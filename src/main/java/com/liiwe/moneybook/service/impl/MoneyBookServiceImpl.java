@@ -63,6 +63,11 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
+    public List<Map<String, String>> queryCategoryDataByYear(String year) {
+        return moneyBookMapper.selectCategoryDataByYear(year);
+    }
+
+    @Override
     public List<Map<String, String>> queryMonthCategoryDataByYear(String year) {
         return moneyBookMapper.selectMonthCategoryDataByYear(year);
     }
