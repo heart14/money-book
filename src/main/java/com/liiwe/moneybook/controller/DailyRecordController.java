@@ -1,12 +1,14 @@
 package com.liiwe.moneybook.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.liiwe.moneybook.base.bean.entity.DiaryBookRecord;
 import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
 import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.listener.RecordExcelListener;
+import com.liiwe.moneybook.service.DiaryBookService;
 import com.liiwe.moneybook.service.MoneyBookService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +28,11 @@ public class DailyRecordController {
 
     private final MoneyBookService moneyBookService;
 
-    public DailyRecordController(MoneyBookService moneyBookService) {
+    private final DiaryBookService diaryBookService;
+
+    public DailyRecordController(MoneyBookService moneyBookService, DiaryBookService diaryBookService) {
         this.moneyBookService = moneyBookService;
+        this.diaryBookService = diaryBookService;
     }
 
     /**
@@ -98,6 +103,9 @@ public class DailyRecordController {
                 .doRead();
         List<RecordExcel> records = listener.getData();
         moneyBookService.upload(records);
+
+        List<DiaryBookRecord> diaryList = listener.getDiary();
+        diaryBookService.upload(diaryList);
         return records;
     }
 }
