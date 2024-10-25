@@ -34,4 +34,7 @@ public class RecordExcel {
 
     @ExcelProperty(value = "备注", index = 6)
     private String remark;
+
+    @ExcelProperty(value = "日记", index = 8)
+    private String diary;
 }

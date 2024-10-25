@@ -3,11 +3,15 @@ package com.liiwe.moneybook.base.listener;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.liiwe.moneybook.base.bean.entity.DiaryBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author wfli
@@ -50,4 +54,16 @@ public class RecordExcelListener extends AnalysisEventListener<RecordExcel> {
         return data;
     }
 
+    public List<DiaryBookRecord> getDiary() {
+        List<DiaryBookRecord> list = new ArrayList<>();
+        for (RecordExcel record : records) {
+            if (StrUtil.isNotBlank(record.getDiary())) {
+                DiaryBookRecord diaryBookRecord = new DiaryBookRecord();
+                diaryBookRecord.setDate(record.getDate().replace(".", "-"));
+                diaryBookRecord.setDiary(record.getDiary());
+                list.add(diaryBookRecord);
+            }
+        }
+        return list;
+    }
 }

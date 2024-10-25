@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
 import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
+import com.liiwe.moneybook.base.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Date;
  * @author wfli
  * @since 2024/9/25 18:37
  */
-@TableName("t_money_book_record")
+@TableName("t_money_book")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -80,10 +81,32 @@ public class MoneyBookRecord {
         this.amount = record.getAmount();
 
         this.type = "支出";
-        this.category = StrUtil.isBlank(record.getCategory()) ? "未分类" : record.getCategory();
+        this.category = mappingCategory(record);
         this.remark = record.getRemark();
         this.recordTime = DateUtil.parse(this.date + " 12:00:00");
 
         this.username = "liwenfei";
+    }
+
+    /**
+     * 处理excel导入时，excel分类与系统分类映射关系
+     * @param record
+     * @return
+     */
+    private String mappingCategory(RecordExcel record) {
+        String category = Constants.categoriesMapping.getOrDefault(record.getCategory(), "未分类");
+        if (StrUtil.isBlank(record.getCategory())) {
+            return "未分类";
+        }
+        if (record.getTitle().contains("礼金") || record.getTitle().contains("转账")) {
+            return "转账";
+        } else if (record.getTitle().contains("房租")) {
+            return "住房";
+        } else if (record.getTitle().contains("医院")) {
+            return "医疗";
+        } else if (record.getTitle().equals("炫赫门")) {
+            return "其它2";
+        }
+        return category;
     }
 }
