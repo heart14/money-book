@@ -17,12 +17,12 @@ import java.util.Map;
 public interface MoneyBookMapper extends BaseMapper<MoneyBookRecord> {
 
     @MapKey("byMonth")
-    List<Map<String,String>> selectMonthDataByYear(@Param("year") String year);
+    List<Map<String, String>> selectMonthDataByYear(@Param("byYear") String byYear, @Param("username") String username);
 
     @MapKey("category")
-    List<Map<String,String>> selectCategoryDataByYear(@Param("year") String year);
+    List<Map<String, String>> selectCategoryDataByYear(@Param("byYear") String byYear, @Param("username") String username);
 
     @MapKey("category")
-    List<Map<String,String>> selectMonthCategoryDataByYear(@Param("year") String year);
+    List<Map<String, String>> selectMonthCategoryDataByYear(@Param("byYear") String byYear, @Param("username") String username);
 
 }

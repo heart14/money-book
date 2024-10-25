@@ -36,22 +36,22 @@ public interface MoneyBookService {
 
     /**
      * 查询月支出统计图数据
-     * @param year
+     * @param request
      * @return
      */
-    List<Map<String, String>> queryMonthDataByYear(String year);
+    List<Map<String, String>> queryMonthDataByYear(QueryRecordRequest request);
 
     /**
      * 查询分类支出统计图数据
-     * @param year
+     * @param request
      * @return
      */
-    List<Map<String, String>> queryCategoryDataByYear(String year);
+    List<Map<String, String>> queryCategoryDataByYear(QueryRecordRequest request);
 
     /**
      * 查询月分类统计表数据
-     * @param year
+     * @param request
      * @return
      */
-    List<Map<String, String>> queryMonthCategoryDataByYear(String year);
+    List<Map<String, String>> queryMonthCategoryDataByYear(QueryRecordRequest request);
 }

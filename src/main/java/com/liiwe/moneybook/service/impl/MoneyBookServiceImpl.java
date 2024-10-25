@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
-import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
+import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
@@ -58,17 +58,17 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
-    public List<Map<String, String>> queryMonthDataByYear(String year) {
-        return moneyBookMapper.selectMonthDataByYear(year);
+    public List<Map<String, String>> queryMonthDataByYear(QueryRecordRequest request) {
+        return moneyBookMapper.selectMonthDataByYear(request.getByYear(), request.getUsername());
     }
 
     @Override
-    public List<Map<String, String>> queryCategoryDataByYear(String year) {
-        return moneyBookMapper.selectCategoryDataByYear(year);
+    public List<Map<String, String>> queryCategoryDataByYear(QueryRecordRequest request) {
+        return moneyBookMapper.selectCategoryDataByYear(request.getByYear(), request.getUsername());
     }
 
     @Override
-    public List<Map<String, String>> queryMonthCategoryDataByYear(String year) {
-        return moneyBookMapper.selectMonthCategoryDataByYear(year);
+    public List<Map<String, String>> queryMonthCategoryDataByYear(QueryRecordRequest request) {
+        return moneyBookMapper.selectMonthCategoryDataByYear(request.getByYear(), request.getUsername());
     }
 }

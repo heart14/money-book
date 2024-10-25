@@ -22,14 +22,14 @@
     </appender>
 
     <!-- 根 Logger 配置 -->
-    <root level="DEBUG">
+    <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE" />
 <!--        <appender-ref ref="FILE" />-->
     </root>
 
     <!-- 其他 Logger 配置 -->
     <!--Mybatis SQL语句输出到控制台-->
-    <logger name="com.liiwe.mapper" level="DEBUG" additivity="false">
+    <logger name="com.liiwe.moneybook.mapper" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 </configuration>

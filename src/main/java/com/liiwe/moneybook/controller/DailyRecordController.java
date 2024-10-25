@@ -54,35 +54,35 @@ public class DailyRecordController {
 
     /**
      * 查询月支出统计图数据
-     * @param year
+     * @param request
      * @return
      */
-    @GetMapping("/monthData/{year}")
-    public SysResponse monthData(@PathVariable("year") String year) {
-        log.info("query:{}", year);
-        return SysResponse.success(moneyBookService.queryMonthDataByYear(year));
+    @GetMapping("/monthData")
+    public SysResponse monthData(QueryRecordRequest request) {
+        log.info("query:{}", request);
+        return SysResponse.success(moneyBookService.queryMonthDataByYear(request));
     }
 
     /**
      * 查询分类支出统计图数据
-     * @param year
+     * @param request
      * @return
      */
-    @GetMapping("/categoryData/{year}")
-    public SysResponse categoryData(@PathVariable("year") String year) {
-        log.info("query:{}", year);
-        return SysResponse.success(moneyBookService.queryCategoryDataByYear(year));
+    @GetMapping("/categoryData")
+    public SysResponse categoryData(QueryRecordRequest request) {
+        log.info("query:{}", request);
+        return SysResponse.success(moneyBookService.queryCategoryDataByYear(request));
     }
 
     /**
      * 查询月分类统计表数据
-     * @param year
+     * @param request
      * @return
      */
-    @GetMapping("/monthCategoryData/{year}")
-    public SysResponse monthCategoryData(@PathVariable("year") String year) {
-        log.info("query:{}", year);
-        return SysResponse.success(moneyBookService.queryMonthCategoryDataByYear(year));
+    @GetMapping("/monthCategoryData")
+    public SysResponse monthCategoryData(QueryRecordRequest request) {
+        log.info("query:{}", request);
+        return SysResponse.success(moneyBookService.queryMonthCategoryDataByYear(request));
     }
 
     /**
