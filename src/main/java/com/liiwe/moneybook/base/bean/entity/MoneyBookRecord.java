@@ -81,7 +81,8 @@ public class MoneyBookRecord {
         this.amount = record.getAmount();
 
         this.type = "支出";
-        this.category = mappingCategory(record);
+//        this.category = mappingCategory(record);
+        this.category = StrUtil.isBlank(record.getCategory()) ? "未分类" : record.getCategory();
         this.remark = record.getRemark();
         this.recordTime = DateUtil.parse(this.date + " 12:00:00");
 
@@ -89,7 +90,7 @@ public class MoneyBookRecord {
     }
 
     /**
-     * 处理excel导入时，excel分类与系统分类映射关系
+     * 处理excel导入时，excel分类与系统分类映射关系，适用2024年的
      * @param record
      * @return
      */
