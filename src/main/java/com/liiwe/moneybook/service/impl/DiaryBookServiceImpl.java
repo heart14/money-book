@@ -5,6 +5,7 @@ import com.liiwe.moneybook.mapper.DiaryBookMapper;
 import com.liiwe.moneybook.service.DiaryBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class DiaryBookServiceImpl implements DiaryBookService {
     }
 
     @Override
+    @Transactional
     public void upload(List<DiaryBookRecord> list) {
         for (DiaryBookRecord record : list) {
             diaryBookMapper.insert(record);

@@ -10,6 +10,7 @@ import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
+    @Transactional
     public void upload(List<RecordExcel> records) {
         MoneyBookRecord moneyBookRecord;
         for (RecordExcel record : records) {

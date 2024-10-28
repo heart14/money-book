@@ -98,15 +98,15 @@ public class MoneyBookRecord {
         if (StrUtil.isBlank(record.getCategory())) {
             return "未分类";
         }
-        if (record.getTitle().contains("礼金") || record.getTitle().contains("转账")) {
-            return "转账";
-        } else if (record.getTitle().contains("房租")) {
-            return "住房";
-        } else if (record.getTitle().contains("医院")) {
-            return "医疗";
-        } else if (record.getTitle().equals("炫赫门")) {
-            return "其它2";
-        }
+//        if (record.getTitle().contains("礼金") || record.getTitle().contains("转账")) {
+//            return "转账";
+//        } else if (record.getTitle().contains("房租")) {
+//            return "住房";
+//        } else if (record.getTitle().contains("医院")) {
+//            return "医疗";
+//        } else if (record.getTitle().equals("炫赫门")) {
+//            return "其它";
+//        }
         return category;
     }
 }
