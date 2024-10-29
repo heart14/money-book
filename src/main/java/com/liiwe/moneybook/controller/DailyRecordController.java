@@ -58,6 +58,17 @@ public class DailyRecordController {
     }
 
     /**
+     * 查询年度收支统计图数据
+     * @param request
+     * @return
+     */
+    @GetMapping("/annualData")
+    public SysResponse annualData(QueryRecordRequest request){
+        log.info("query:{}", request);
+        return SysResponse.success(moneyBookService.queryAnnualDataByType(request));
+    }
+
+    /**
      * 查询月支出统计图数据
      * @param request
      * @return

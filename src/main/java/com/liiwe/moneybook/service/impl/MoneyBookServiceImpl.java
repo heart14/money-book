@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,16 @@ public class MoneyBookServiceImpl implements MoneyBookService {
             moneyBookRecord = new MoneyBookRecord(record);
             moneyBookMapper.insert(moneyBookRecord);
         }
+    }
+
+    @Override
+    public Map<String, List<Map<String, String>>> queryAnnualDataByType(QueryRecordRequest request) {
+        List<Map<String, String>> income = moneyBookMapper.selectAnnualDataByType("收入", request.getUsername());
+        List<Map<String, String>> expenses = moneyBookMapper.selectAnnualDataByType("支出", request.getUsername());
+        Map<String, List<Map<String, String>>> result = new HashMap<>();
+        result.put("income", income);
+        result.put("expenses", expenses);
+        return result;
     }
 
     @Override

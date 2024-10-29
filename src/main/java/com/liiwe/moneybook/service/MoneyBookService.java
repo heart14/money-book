@@ -35,6 +35,13 @@ public interface MoneyBookService {
     void upload(List<RecordExcel> records);
 
     /**
+     * 查询年度收支数据
+     * @param request
+     * @return
+     */
+    Map<String, List<Map<String, String>>> queryAnnualDataByType(QueryRecordRequest request);
+
+    /**
      * 查询月支出统计图数据
      * @param request
      * @return
