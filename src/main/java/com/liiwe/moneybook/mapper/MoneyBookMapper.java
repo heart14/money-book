@@ -16,6 +16,8 @@ import java.util.Map;
 @Mapper
 public interface MoneyBookMapper extends BaseMapper<MoneyBookRecord> {
 
+    Map<String, String> selectAnnualDataByYear(@Param("byYear") String byYear, @Param("username") String username);
+
     @MapKey("date")
     List<Map<String, String>> selectAnnualDataByType(@Param("type") String type, @Param("username") String username);
 

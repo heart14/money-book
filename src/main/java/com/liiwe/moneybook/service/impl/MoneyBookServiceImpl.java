@@ -61,7 +61,12 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
-    public Map<String, List<Map<String, String>>> queryAnnualDataByType(QueryRecordRequest request) {
+    public Map<String, String> queryAnnualDataByYear(QueryRecordRequest request) {
+        return moneyBookMapper.selectAnnualDataByYear(request.getByYear(), request.getUsername());
+    }
+
+    @Override
+    public Map<String, List<Map<String, String>>> queryAnnualData(QueryRecordRequest request) {
         List<Map<String, String>> income = moneyBookMapper.selectAnnualDataByType("收入", request.getUsername());
         List<Map<String, String>> expenses = moneyBookMapper.selectAnnualDataByType("支出", request.getUsername());
         Map<String, List<Map<String, String>>> result = new HashMap<>();

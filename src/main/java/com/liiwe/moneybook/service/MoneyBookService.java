@@ -2,8 +2,8 @@ package com.liiwe.moneybook.service;
 
 import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
-import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
+import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +39,14 @@ public interface MoneyBookService {
      * @param request
      * @return
      */
-    Map<String, List<Map<String, String>>> queryAnnualDataByType(QueryRecordRequest request);
+    Map<String, String> queryAnnualDataByYear(QueryRecordRequest request);
+
+    /**
+     * 查询年度收支统计图数据
+     * @param request
+     * @return
+     */
+    Map<String, List<Map<String, String>>> queryAnnualData(QueryRecordRequest request);
 
     /**
      * 查询月支出统计图数据

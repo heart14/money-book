@@ -4,6 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liiwe.moneybook.mapper.MoneyBookMapper">
 
+    <select id="selectAnnualDataByYear" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            #{byYear} AS "year",
+            SUM(CASE WHEN t.`type` = '收入' THEN CAST(t.`amount` AS DECIMAL(10, 2)) ELSE 0 END) AS "totalIncome",
+            SUM(CASE WHEN t.`type` = '支出' THEN CAST(t.`amount` AS DECIMAL(10, 2)) ELSE 0 END) AS "totalExpense"
+        FROM `t_money_book` t
+        WHERE DATE_FORMAT(t.`date`, '%Y') = #{byYear}
+        <if test="username != null and username != ''">
+            AND t.`username` = #{username}
+        </if>
+        GROUP BY DATE_FORMAT(t.`date`, '%Y')
+
+        UNION ALL
+
+        SELECT
+            #{byYear} AS "year",
+            0 AS "totalIncome",
+            0 AS "totalExpense"
+        FROM dual
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM `t_money_book` t
+            WHERE DATE_FORMAT(t.`date`, '%Y') = #{byYear}
+            <if test="username != null and username != ''">
+                AND t.`username` = #{username}
+            </if>
+        ) LIMIT 1
+    </select>
+
     <select id="selectAnnualDataByType" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT DATE_FORMAT(t.`date`, '%Y') "date", SUM(CAST(t.`amount` AS DECIMAL (10, 2))) "totalAmount"
         FROM `t_money_book` t
