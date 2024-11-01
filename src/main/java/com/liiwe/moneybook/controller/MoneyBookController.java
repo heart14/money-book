@@ -24,13 +24,13 @@ import java.util.Map;
 @RestController
 @RequestMapping(("/daily"))
 @Slf4j
-public class DailyRecordController {
+public class MoneyBookController {
 
     private final MoneyBookService moneyBookService;
 
     private final DiaryBookService diaryBookService;
 
-    public DailyRecordController(MoneyBookService moneyBookService, DiaryBookService diaryBookService) {
+    public MoneyBookController(MoneyBookService moneyBookService, DiaryBookService diaryBookService) {
         this.moneyBookService = moneyBookService;
         this.diaryBookService = diaryBookService;
     }

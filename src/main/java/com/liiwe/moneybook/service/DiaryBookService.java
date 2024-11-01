@@ -1,6 +1,7 @@
 package com.liiwe.moneybook.service;
 
 import com.liiwe.moneybook.base.bean.entity.DiaryBookRecord;
+import com.liiwe.moneybook.base.bean.request.DiaryBookRequest;
 
 import java.util.List;
 
@@ -11,4 +12,8 @@ import java.util.List;
 public interface DiaryBookService {
 
     void upload(List<DiaryBookRecord> list);
+
+    DiaryBookRecord record(DiaryBookRequest request);
+
+    DiaryBookRecord query(DiaryBookRequest request);
 }
