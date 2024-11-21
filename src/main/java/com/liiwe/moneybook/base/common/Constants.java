@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Constants {
 
-    public static final List<String> categories = new ArrayList<>(List.of("餐饮", "住房", "交通", "旅行", "服饰", "汽车", "宠物", "生活缴费", "医疗", "教育", "数码", "文娱", "日用", "转账", "其它"));
+    public static final List<String> categories = new ArrayList<>(List.of("餐饮", "住房", "交通", "旅行", "服饰", "汽车", "宠物", "生活缴费", "医疗", "教育", "数码", "文娱", "日用", "生活", "转账", "其它", "薪酬", "奖金"));
 
     /**
      * 通过excel导入时，excel分类与系统分类映射关系

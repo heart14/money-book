@@ -81,8 +81,8 @@ public class MoneyBookRecord {
         this.amount = record.getAmount();
 
         this.type = "支出";
-//        this.category = mappingCategory(record);
-        this.category = StrUtil.isBlank(record.getCategory()) ? "未分类" : record.getCategory();
+        this.category = mappingCategory(record);
+//        this.category = StrUtil.isBlank(record.getCategory()) ? "未分类" : record.getCategory();
         this.remark = record.getRemark();
         this.recordTime = DateUtil.parse(this.date + " 12:00:00");
 
@@ -99,15 +99,15 @@ public class MoneyBookRecord {
         if (StrUtil.isBlank(record.getCategory())) {
             return "未分类";
         }
-//        if (record.getTitle().contains("礼金") || record.getTitle().contains("转账")) {
-//            return "转账";
-//        } else if (record.getTitle().contains("房租")) {
-//            return "住房";
-//        } else if (record.getTitle().contains("医院")) {
-//            return "医疗";
-//        } else if (record.getTitle().equals("炫赫门")) {
-//            return "其它";
-//        }
+        if (record.getTitle().contains("礼金") || record.getTitle().contains("转账")) {
+            return "转账";
+        } else if (record.getTitle().contains("房租")) {
+            return "住房";
+        } else if (record.getTitle().contains("医院")) {
+            return "医疗";
+        } else if (record.getTitle().equals("炫赫门")) {
+            return "其它";
+        }
         return category;
     }
 }
