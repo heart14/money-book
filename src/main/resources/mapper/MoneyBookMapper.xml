@@ -50,6 +50,9 @@
         <if test="username != null and username != ''">
             AND t.`username` = #{username}
         </if>
+        <if test="type != null and type != ''">
+            AND t.`type` = #{type}
+        </if>
         GROUP BY DATE_FORMAT(t.`date`, '%Y-%m')
     </select>
 
@@ -59,6 +62,9 @@
         WHERE DATE_FORMAT(t.`date`, '%Y') = #{byYear}
         <if test="username != null and username != ''">
             AND t.`username` = #{username}
+        </if>
+        <if test="type != null and type != ''">
+            AND t.`type` = #{type}
         </if>
         GROUP BY t.`category`
     </select>
@@ -89,6 +95,9 @@
         DATE_FORMAT(t.`date`, '%Y') = #{byYear}
         <if test="username != null and username != ''">
             AND t.`username` = #{username}
+        </if>
+        <if test="type != null and type != ''">
+            AND t.`type` = #{type}
         </if>
         GROUP BY t.`category`, byMonth
         ) AS subquery

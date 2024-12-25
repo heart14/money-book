@@ -6,6 +6,7 @@ import com.liiwe.moneybook.base.bean.entity.MoneyBookRecord;
 import com.liiwe.moneybook.base.bean.model.RecordExcel;
 import com.liiwe.moneybook.base.bean.request.QueryRecordRequest;
 import com.liiwe.moneybook.base.bean.request.SaveRecordRequest;
+import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
     @Override
     public List<MoneyBookRecord> query(QueryRecordRequest request) {
+        if (request.getType() == null) {
+            request.setType("支出");
+        }
         LambdaQueryWrapper<MoneyBookRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.likeRight(StrUtil.isNotBlank(request.getByYear()), MoneyBookRecord::getDate, request.getByYear())
                 .likeRight(StrUtil.isNotBlank(request.getByMonth()), MoneyBookRecord::getDate, request.getByMonth())
@@ -77,16 +81,16 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
     @Override
     public List<Map<String, String>> queryMonthDataByYear(QueryRecordRequest request) {
-        return moneyBookMapper.selectMonthDataByYear(request.getByYear(), request.getUsername());
+        return moneyBookMapper.selectMonthDataByYear("支出", request.getByYear(), request.getUsername());
     }
 
     @Override
     public List<Map<String, String>> queryCategoryDataByYear(QueryRecordRequest request) {
-        return moneyBookMapper.selectCategoryDataByYear(request.getByYear(), request.getUsername());
+        return moneyBookMapper.selectCategoryDataByYear("支出", request.getByYear(), request.getUsername());
     }
 
     @Override
     public List<Map<String, String>> queryMonthCategoryDataByYear(QueryRecordRequest request) {
-        return moneyBookMapper.selectMonthCategoryDataByYear(request.getByYear(), request.getUsername());
+        return moneyBookMapper.selectMonthCategoryDataByYear("支出", request.getByYear(), request.getUsername());
     }
 }

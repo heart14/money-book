@@ -22,12 +22,12 @@ public interface MoneyBookMapper extends BaseMapper<MoneyBookRecord> {
     List<Map<String, String>> selectAnnualDataByType(@Param("type") String type, @Param("username") String username);
 
     @MapKey("byMonth")
-    List<Map<String, String>> selectMonthDataByYear(@Param("byYear") String byYear, @Param("username") String username);
+    List<Map<String, String>> selectMonthDataByYear(@Param("type") String type, @Param("byYear") String byYear, @Param("username") String username);
 
     @MapKey("category")
-    List<Map<String, String>> selectCategoryDataByYear(@Param("byYear") String byYear, @Param("username") String username);
+    List<Map<String, String>> selectCategoryDataByYear(@Param("type") String type, @Param("byYear") String byYear, @Param("username") String username);
 
     @MapKey("category")
-    List<Map<String, String>> selectMonthCategoryDataByYear(@Param("byYear") String byYear, @Param("username") String username);
+    List<Map<String, String>> selectMonthCategoryDataByYear(@Param("type") String type, @Param("byYear") String byYear, @Param("username") String username);
 
 }
