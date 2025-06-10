@@ -3,7 +3,7 @@ package com.liiwe.moneybook.controller;
 import com.liiwe.moneybook.base.bean.domain.system.LoginReq;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
-import com.liiwe.moneybook.base.utils.JwtUtils;
+import com.liiwe.moneybook.base.security.JwtUtils;
 import com.liiwe.moneybook.service.SysUserService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;

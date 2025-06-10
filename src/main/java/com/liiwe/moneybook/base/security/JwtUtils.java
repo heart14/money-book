@@ -1,4 +1,4 @@
-package com.liiwe.moneybook.base.utils;
+package com.liiwe.moneybook.base.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
@@ -87,6 +87,15 @@ public class JwtUtils {
         当token过期时，解析失败，报错io.jsonwebtoken.ExpiredJwtException: JWT expired 1491 milliseconds ago at ...
         所以此方法也可用来判断token是否已过期
          */
+    }
+
+    /**
+     * 解析TOKEN，提取用户名
+     * @param token
+     * @return
+     */
+    public static String extractUsernameFromToken(String token) {
+        return Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getPayload().getIssuer();
     }
 
 
