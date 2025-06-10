@@ -1,10 +1,9 @@
 package com.liiwe.moneybook.base.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -14,6 +13,7 @@ import java.util.Date;
  * @since 2025/6/9 16:17
  */
 @Slf4j
+@Component
 public class JwtUtils {
 
     // 加密密钥
@@ -28,7 +28,7 @@ public class JwtUtils {
      * 初始化签名密钥
      * @return
      */
-    private static SecretKey generateKey() {
+    private SecretKey generateKey() {
         // 如果密钥不足32位，那么就用0补足长度. 该密钥用于后边的加解密
         int requiredLength = 32 - secretKey.length();
         if (requiredLength > 0) {
@@ -49,7 +49,7 @@ public class JwtUtils {
      * @param username
      * @return
      */
-    public static String generateAccessToken(String uid, String username) {
+    public String generateAccessToken(String uid, String username) {
         return Jwts.builder()
                 .subject(uid)
                 .issuer(username)
@@ -65,7 +65,7 @@ public class JwtUtils {
      * @param username
      * @return
      */
-    public static String generateRefreshToken(String uid, String username) {
+    public String generateRefreshToken(String uid, String username) {
         return Jwts.builder()
                 .subject(uid)
                 .issuer(username)
@@ -75,13 +75,21 @@ public class JwtUtils {
                 .compact();
     }
 
+    public boolean validateToken(String token){
+        try {
+            Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token);
+            return true;
+        } catch (JwtException|IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     /**
      * 解析TOKEN
      * @param token
      * @return
      */
-    public static Claims parseToken(String token) {
+    public Claims parseToken(String token) {
         return Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getPayload();
         /*
         当token过期时，解析失败，报错io.jsonwebtoken.ExpiredJwtException: JWT expired 1491 milliseconds ago at ...
@@ -94,7 +102,7 @@ public class JwtUtils {
      * @param token
      * @return
      */
-    public static String extractUsernameFromToken(String token) {
+    public String extractUsernameFromToken(String token) {
         return Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getPayload().getIssuer();
     }
 
@@ -103,19 +111,19 @@ public class JwtUtils {
      * 测试方法
      * @param args
      */
-    public static void main(String[] args) {
-        String token = generateAccessToken("u01", "wfli");
-        log.info("token: {}", token);
-
-        Claims claims = parseToken(token);
-        log.info("claims: {}", claims);
-
-        String subject = claims.getSubject();
-        log.info("subject: {}", subject);
-
-        JwsHeader header = Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getHeader();
-        log.info("header: {}", header);
-    }
+//    public static void main(String[] args) {
+//        String token = generateAccessToken("u01", "wfli");
+//        log.info("token: {}", token);
+//
+//        Claims claims = parseToken(token);
+//        log.info("claims: {}", claims);
+//
+//        String subject = claims.getSubject();
+//        log.info("subject: {}", subject);
+//
+//        JwsHeader header = Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getHeader();
+//        log.info("header: {}", header);
+//    }
 
 }
 /*
