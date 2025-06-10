@@ -13,9 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaryBookRecord {
+public class DiaryBook {
 
     private String date;
 
     private String diary;
+
+    private String createTime;
+
+    private String uid;
 }
