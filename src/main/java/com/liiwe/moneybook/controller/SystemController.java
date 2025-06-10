@@ -1,0 +1,65 @@
+package com.liiwe.moneybook.controller;
+
+import com.liiwe.moneybook.base.bean.domain.system.LoginReq;
+import com.liiwe.moneybook.base.bean.entity.SysUser;
+import com.liiwe.moneybook.base.bean.model.SysResponse;
+import com.liiwe.moneybook.base.utils.JwtUtils;
+import com.liiwe.moneybook.service.SysUserService;
+import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author wfli
+ * @since 2025/6/9 15:22
+ */
+@RestController
+@RequestMapping("/system")
+@Slf4j
+public class SystemController {
+    private final SysUserService userService;
+
+    public SystemController(SysUserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/login")
+    public SysResponse login(@RequestBody LoginReq loginReq) {
+        log.info("system login: {}", loginReq);
+
+        SysUser sysUser = userService.login(loginReq.getUserName(), loginReq.getPassword());
+
+        Map<String, String> data = new HashMap<>();
+        data.put("token", JwtUtils.generateAccessToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
+        data.put("refreshToken", JwtUtils.generateRefreshToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
+
+        // redis存储refreshToken，key规则：refresh_token:uid
+
+        return SysResponse.success("登录成功", data);
+    }
+
+    @GetMapping("/refresh/{refreshToken}")
+    public SysResponse refreshToken(@PathVariable("refreshToken") String refreshToken) {
+
+        // 可以解析token，说明未过期
+        Claims claims = JwtUtils.parseToken(refreshToken);
+        String uid = claims.getSubject();
+        String username = claims.getIssuer();
+
+        // redis查询key refresh_token:uid，将redis中存储的值与当前值进行比较
+        // 如果相同，则说明refreshToken正确且在有效期内
+
+        // 生成新的token并在redis中重新存储
+
+        Map<String, String> data = new HashMap<>();
+        data.put("token", JwtUtils.generateAccessToken(uid,username));
+        data.put("refreshToken", JwtUtils.generateRefreshToken(uid,username));
+
+        // redis存储refreshToken，key规则：refresh_token:uid
+
+        return SysResponse.success("AccessToken刷新成功", data);
+    }
+}
