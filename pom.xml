@@ -51,6 +51,14 @@
             <version>5.8.20</version>
         </dependency>
 
+        <!-- jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+
+
         <!--mybatis-plus依赖，注意版本，springboot3要使用对应版本依赖，否则报错-->
         <dependency>
             <groupId>com.baomidou</groupId>
