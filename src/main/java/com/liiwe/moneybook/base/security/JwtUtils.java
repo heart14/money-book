@@ -34,7 +34,6 @@ public class JwtUtils {
         if (requiredLength > 0) {
             secretKey = secretKey + "0".repeat(requiredLength);
         }
-        log.info("secretkey: {}", secretKey);
         // 生成KEY
         return Keys.hmacShaKeyFor(secretKey.getBytes());
         /*
