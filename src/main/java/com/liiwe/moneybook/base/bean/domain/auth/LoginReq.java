@@ -1,4 +1,4 @@
-package com.liiwe.moneybook.base.bean.domain.system;
+package com.liiwe.moneybook.base.bean.domain.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,7 @@ package com.liiwe.moneybook.controller;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.liiwe.moneybook.base.bean.domain.system.LoginReq;
+import com.liiwe.moneybook.base.bean.domain.auth.LoginReq;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.SysUserService;
 import jakarta.validation.Valid;

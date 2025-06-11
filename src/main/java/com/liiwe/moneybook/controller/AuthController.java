@@ -1,6 +1,6 @@
 package com.liiwe.moneybook.controller;
 
-import com.liiwe.moneybook.base.bean.domain.system.LoginReq;
+import com.liiwe.moneybook.base.bean.domain.auth.LoginReq;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.security.JwtUtils;
