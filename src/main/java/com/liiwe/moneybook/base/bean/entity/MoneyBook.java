@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.base.bean.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class MoneyBook {
 
+    @TableId
     private Long id;
 
     private String date;
