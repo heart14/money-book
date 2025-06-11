@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024/9/25 18:44
  */
 @RestController
-@RequestMapping(("/daily"))
+@RequestMapping(("/book"))
 @Slf4j
 public class MoneyBookController {
 
