@@ -17,11 +17,11 @@ public class MoneyBookImportTemplate {
     @ExcelProperty(value = "日期", index = 0)
     private String date;
 
-//    @ExcelProperty(value = "星期", index = 1)
-//    private String week;
-//
-//    @ExcelProperty(value = "班次", index = 2)
-//    private String workType;
+    @ExcelProperty(value = "星期", index = 1)
+    private String week;
+
+    @ExcelProperty(value = "班次", index = 2)
+    private String workType;
 
     @ExcelProperty(value = "描述", index = 3)
     private String title;
