@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.service;
 
+import com.liiwe.moneybook.base.bean.domain.user.UserInfo;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 
 /**
@@ -11,4 +12,6 @@ public interface SysUserService {
     SysUser login(String username, String password);
 
     void register(String username, String password);
+
+    UserInfo getUserInfo(String username);
 }
