@@ -23,9 +23,17 @@ public class SysUser {
 
     private String password;
 
-    public SysUser(String username,String password){
+    private String nickname;
+
+    public SysUser(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public SysUser(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
     }
 
 }
