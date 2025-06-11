@@ -21,5 +21,5 @@ public class DiaryBook {
 
     private String createTime;
 
-    private String uid;
+    private String username;
 }
