@@ -22,26 +22,6 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public void createSysUser(String username, String password) {
-
-        // 根据username，检查用户是否已存在
-        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUsername, username);
-        SysUser selected = userMapper.selectOne(wrapper);
-        if (selected!=null) {
-            throw new RuntimeException("该用户已存在");
-        }
-
-        // 新增用户
-        SysUser sysUser = new SysUser(username, password);
-        int insert = userMapper.insert(sysUser);
-
-        if (insert != 1) {
-            throw new RuntimeException("新增用户失败");
-        }
-    }
-
-    @Override
     public SysUser login(String username, String password) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUsername, username).eq(SysUser::getPassword, password);
@@ -53,5 +33,25 @@ public class SysUserServiceImpl implements SysUserService {
         }
 
         return sysUser;
+    }
+
+    @Override
+    public void register(String username, String password) {
+
+        // 根据username，检查用户是否已存在
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername, username);
+        SysUser selected = userMapper.selectOne(wrapper);
+        if (selected != null) {
+            throw new RuntimeException("用户已存在");
+        }
+
+        // 新增用户
+        SysUser sysUser = new SysUser(username, password);
+        int insert = userMapper.insert(sysUser);
+
+        if (insert != 1) {
+            throw new RuntimeException("用户注册失败");
+        }
     }
 }

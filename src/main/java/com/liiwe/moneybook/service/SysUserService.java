@@ -8,7 +8,7 @@ import com.liiwe.moneybook.base.bean.entity.SysUser;
  */
 public interface SysUserService {
 
-    void createSysUser(String username, String password);
-
     SysUser login(String username, String password);
+
+    void register(String username, String password);
 }

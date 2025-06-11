@@ -49,7 +49,7 @@ public class AuthController {
     public SysResponse register(@RequestBody LoginReq loginReq) {
         log.info("system register: {}", loginReq);
 
-        userService.createSysUser(loginReq.getUserName(), loginReq.getPassword());
+        userService.register(loginReq.getUserName(), loginReq.getPassword());
         return SysResponse.success();
     }
 
@@ -67,8 +67,8 @@ public class AuthController {
         // 生成新的token并在redis中重新存储
 
         Map<String, String> data = new HashMap<>();
-        data.put("token", jwtUtils.generateAccessToken(uid,username));
-        data.put("refreshToken", jwtUtils.generateRefreshToken(uid,username));
+        data.put("token", jwtUtils.generateAccessToken(uid, username));
+        data.put("refreshToken", jwtUtils.generateRefreshToken(uid, username));
 
         // redis存储refreshToken，key规则：refresh_token:uid
 
