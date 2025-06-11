@@ -6,8 +6,8 @@
     <select id="selectUserRoleByUid" resultType="com.liiwe.moneybook.base.bean.entity.SysRole"
             parameterType="java.lang.Long">
         SELECT *
-        FROM T_SYS_ROLE
-        WHERE ID IN (SELECT ROLE_ID FROM T_USER_ROLE WHERE UID = #{UID})
+        FROM t_sys_role
+        WHERE id IN (SELECT role_id FROM t_user_role WHERE uid = #{uid})
     </select>
 
 </mapper>
