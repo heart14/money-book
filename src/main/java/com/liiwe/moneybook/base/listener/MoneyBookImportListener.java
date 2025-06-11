@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.liiwe.moneybook.base.bean.entity.DiaryBook;
-import com.liiwe.moneybook.base.bean.model.ExcelImportTemplate;
+import com.liiwe.moneybook.base.bean.model.MoneyBookImportTemplate;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ import java.util.List;
  * @since 2024/10/15 16:22
  */
 @Slf4j
-public class RecordExcelListener extends AnalysisEventListener<ExcelImportTemplate> {
+public class MoneyBookImportListener extends AnalysisEventListener<MoneyBookImportTemplate> {
 
-    private final List<ExcelImportTemplate> records = new ArrayList<>();
+    private final List<MoneyBookImportTemplate> records = new ArrayList<>();
 
     @Override
-    public void invoke(ExcelImportTemplate excelImportTemplate, AnalysisContext analysisContext) {
-        log.info("读取.. {}", excelImportTemplate);
-        records.add(excelImportTemplate);
+    public void invoke(MoneyBookImportTemplate moneyBookImportTemplate, AnalysisContext analysisContext) {
+        log.info("读取.. {}", moneyBookImportTemplate);
+        records.add(moneyBookImportTemplate);
     }
 
     @Override
@@ -30,10 +30,10 @@ public class RecordExcelListener extends AnalysisEventListener<ExcelImportTempla
         log.info("读取完成");
     }
 
-    public List<ExcelImportTemplate> getData() {
-        List<ExcelImportTemplate> data = new ArrayList<>();
-        ExcelImportTemplate lastRecord = new ExcelImportTemplate();
-        for (ExcelImportTemplate record : records) {
+    public List<MoneyBookImportTemplate> getData() {
+        List<MoneyBookImportTemplate> data = new ArrayList<>();
+        MoneyBookImportTemplate lastRecord = new MoneyBookImportTemplate();
+        for (MoneyBookImportTemplate record : records) {
             if (StrUtil.isNotBlank(record.getDate())) {
                 lastRecord = record;
             }
@@ -53,7 +53,7 @@ public class RecordExcelListener extends AnalysisEventListener<ExcelImportTempla
 
     public List<DiaryBook> getDiary() {
         List<DiaryBook> list = new ArrayList<>();
-        for (ExcelImportTemplate record : records) {
+        for (MoneyBookImportTemplate record : records) {
             if (StrUtil.isNotBlank(record.getDiary())) {
                 DiaryBook diaryBook = new DiaryBook();
                 diaryBook.setDate(record.getDate().replace(".", "-"));
