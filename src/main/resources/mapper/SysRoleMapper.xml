@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liiwe.moneybook.mapper.SysRoleMapper">
+
+    <select id="selectUserRoleByUid" resultType="com.liiwe.moneybook.base.bean.entity.SysRole"
+            parameterType="java.lang.Long">
+        SELECT *
+        FROM T_SYS_ROLE
+        WHERE ID IN (SELECT ROLE_ID FROM T_USER_ROLE WHERE UID = #{UID})
+    </select>
+
+</mapper>
