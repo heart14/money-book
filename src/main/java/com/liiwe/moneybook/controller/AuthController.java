@@ -34,7 +34,7 @@ public class AuthController {
     public SysResponse login(@RequestBody LoginReq loginReq) {
         log.info("system login: {}", loginReq);
 
-        SysUser sysUser = userService.login(loginReq.getUserName(), loginReq.getPassword());
+        SysUser sysUser = userService.login(loginReq.getUsername(), loginReq.getPassword());
 
         Map<String, String> data = new HashMap<>();
         data.put("token", jwtUtils.generateAccessToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
@@ -49,7 +49,7 @@ public class AuthController {
     public SysResponse register(@RequestBody LoginReq loginReq) {
         log.info("system register: {}", loginReq);
 
-        userService.register(loginReq.getUserName(), loginReq.getPassword());
+        userService.register(loginReq.getUsername(), loginReq.getPassword());
         return SysResponse.success();
     }
 
