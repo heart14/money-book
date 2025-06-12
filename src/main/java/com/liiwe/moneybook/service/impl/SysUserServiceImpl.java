@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author wfli
@@ -74,7 +73,9 @@ public class SysUserServiceImpl implements SysUserService {
             throw new RuntimeException("用户不存在");
         }
         List<SysRole> sysRoles = roleMapper.selectUserRoleByUid(sysUser.getUid());
-        List<String> roles = sysRoles.stream().map(SysRole::getRole).toList();
+        List<String> roles = sysRoles.stream()
+                .map(sysRole -> "R_" + sysRole.getRole().toUpperCase())
+                .toList();
         return new UserInfo(sysUser, roles);
     }
 }
