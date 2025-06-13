@@ -1,6 +1,8 @@
 package com.liiwe.moneybook.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.liiwe.moneybook.base.bean.domain.mb.BillListReq;
 import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountReq;
 import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountResp;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
@@ -23,6 +25,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class MoneyBookServiceImpl implements MoneyBookService {
+
+    // 定义常量 100，用于金额转换
+    public static final BigDecimal HUNDRED = BigDecimal.valueOf(100L);
 
     private final MoneyBookMapper moneyBookMapper;
 
@@ -98,9 +103,6 @@ public class MoneyBookServiceImpl implements MoneyBookService {
             }
         }
 
-        // 定义常量 100，用于金额转换
-        BigDecimal HUNDRED = BigDecimal.valueOf(100L);
-
         // 创建响应对象
         TotalAmountResp totalAmountResp = new TotalAmountResp();
         // 设置总支出，将金额除以 100 并保留两位小数
@@ -111,4 +113,48 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         return totalAmountResp;
     }
 
+    @Override
+    public List<MoneyBook> getBillList(BillListReq billListReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 获取请求中的日期，并去除前后空格
+        String date = billListReq.getDate().trim();
+        // 获取日期字符串的长度
+        int length = date.length();
+
+        // 创建一个 LambdaQueryWrapper 对象，用于构建查询条件
+        LambdaQueryWrapper<MoneyBook> wrapper = new LambdaQueryWrapper<>();
+        // 设置查询条件：用户名为当前登录用户
+        wrapper.eq(MoneyBook::getUsername, name);
+
+        // 根据日期字符串的长度来决定查询条件
+        switch (length) {
+            // 如果日期长度为 4 或 7，使用模糊匹配
+            case 4, 7:
+                wrapper.like(MoneyBook::getDate, date);
+                break;
+            // 如果日期长度为 10，使用精确匹配
+            case 10:
+                wrapper.eq(MoneyBook::getDate, date);
+                break;
+            // 其他情况下抛出非法参数异常
+            default:
+                throw new IllegalArgumentException("查询参数错误");
+        }
+
+        if (StrUtil.isNotBlank(billListReq.getType())) {
+            wrapper.eq(MoneyBook::getType, billListReq.getType());
+        }
+        if (StrUtil.isNotBlank(billListReq.getCategoryId())) {
+            wrapper.eq(MoneyBook::getCategory, billListReq.getCategoryId());
+        }
+
+        List<MoneyBook> moneyBookList = moneyBookMapper.selectList(wrapper);
+        for (MoneyBook moneyBook : moneyBookList) {
+            moneyBook.setAmount(BigDecimal.valueOf(moneyBook.getStoredAmount()).divide(HUNDRED, 2, RoundingMode.HALF_UP).toString());
+        }
+
+        return moneyBookList;
+    }
 }

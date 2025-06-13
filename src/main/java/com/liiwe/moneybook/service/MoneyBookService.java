@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.service;
 
+import com.liiwe.moneybook.base.bean.domain.mb.BillListReq;
 import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountReq;
 import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountResp;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
@@ -15,4 +16,6 @@ public interface MoneyBookService {
     void importMoneyBook(List<MoneyBook> list);
 
     TotalAmountResp getTotalAmount(TotalAmountReq totalAmountReq);
+
+    List<MoneyBook> getBillList(BillListReq billListReq);
 }
