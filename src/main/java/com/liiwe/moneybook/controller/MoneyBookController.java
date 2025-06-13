@@ -33,6 +33,7 @@ public class MoneyBookController {
     public SysResponse getTotalAmount(TotalAmountReq req){
         log.info("getTotalAmount: {}", req);
         TotalAmountResp totalAmount = moneyBookService.getTotalAmount(req);
+        log.info("getTotalAmount response: {}", totalAmount);
         return SysResponse.success(totalAmount);
     }
 

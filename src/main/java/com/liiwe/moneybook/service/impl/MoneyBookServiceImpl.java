@@ -97,9 +97,9 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         // 创建响应对象
         TotalAmountResp totalAmountResp = new TotalAmountResp();
         // 设置总支出，将金额除以 100 并保留两位小数
-        totalAmountResp.setTotalExpense(totalExpense.divide(HUNDRED, 2, RoundingMode.HALF_UP).toString());
+        totalAmountResp.setTotalExpense(totalExpense.divide(HUNDRED, 2, RoundingMode.HALF_UP));
         // 设置总收入，将金额除以 100 并保留两位小数
-        totalAmountResp.setTotalIncome(totalIncome.divide(HUNDRED, 2, RoundingMode.HALF_UP).toString());
+        totalAmountResp.setTotalIncome(totalIncome.divide(HUNDRED, 2, RoundingMode.HALF_UP));
         // 返回响应对象
         return totalAmountResp;
     }
