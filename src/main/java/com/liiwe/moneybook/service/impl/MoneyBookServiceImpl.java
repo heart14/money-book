@@ -8,6 +8,7 @@ import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,9 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
     @Override
     public TotalAmountResp getTotalAmount(TotalAmountReq totalAmountReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
         // 获取请求中的日期，并去除前后空格
         String date = totalAmountReq.getDate().trim();
         // 获取日期字符串的长度
@@ -49,6 +53,9 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
         // 创建一个 LambdaQueryWrapper 对象，用于构建查询条件
         LambdaQueryWrapper<MoneyBook> wrapper = new LambdaQueryWrapper<>();
+        // 设置查询条件：用户名为当前登录用户
+        wrapper.eq(MoneyBook::getUsername, name);
+
         // 根据日期字符串的长度来决定查询条件
         switch (length) {
             // 如果日期长度为 4 或 7，使用模糊匹配
