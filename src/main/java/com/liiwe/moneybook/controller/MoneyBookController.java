@@ -24,6 +24,11 @@ public class MoneyBookController {
         this.moneyBookService = moneyBookService;
     }
 
+    /**
+     * 按日期查询总支出与收入数据
+     * @param req yyyy | yyyy-MM | yyyy-MM-dd
+     * @return
+     */
     @GetMapping("/getTotalAmount")
     public SysResponse getTotalAmount(TotalAmountReq req){
         log.info("getTotalAmount: {}", req);
