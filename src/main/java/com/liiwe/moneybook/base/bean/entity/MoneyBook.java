@@ -1,6 +1,7 @@
 package com.liiwe.moneybook.base.bean.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -27,6 +30,15 @@ public class MoneyBook {
 
     private String title;
 
+    /**
+     * 数据库存储金额，单位：分
+     */
+    private Long storedAmount;
+
+    /**
+     * 金额，单位：元，用于业务使用，该字段不存储到数据库
+     */
+    @TableField(exist = false)
     private String amount;
 
     private String type;
@@ -42,4 +54,8 @@ public class MoneyBook {
     private Date recordTime;
 
     private String username;
+
+//    public String getAmount() {
+//        return BigDecimal.valueOf(this.storedAmount).divide(BigDecimal.valueOf(100L),2, RoundingMode.HALF_UP).toString();
+//    }
 }

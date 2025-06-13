@@ -9,6 +9,7 @@ import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.model.MoneyBookImportTemplate;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +74,7 @@ public class MoneyBookImportListener extends AnalysisEventListener<MoneyBookImpo
             moneyBook.setTitle(record.getTitle());
             moneyBook.setCategory(record.getCategory());
             moneyBook.setAmount(record.getAmount());
+            moneyBook.setStoredAmount(new BigDecimal(record.getAmount()).multiply(new BigDecimal("100")).longValue());
             moneyBook.setRemark(record.getRemark());
 
             moneyBook.setCreateTime(new Date());
