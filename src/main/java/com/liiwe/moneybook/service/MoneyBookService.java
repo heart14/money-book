@@ -1,9 +1,6 @@
 package com.liiwe.moneybook.service;
 
-import com.liiwe.moneybook.base.bean.domain.mb.BillListReq;
-import com.liiwe.moneybook.base.bean.domain.mb.StatisticDataReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountResp;
+import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 
 import java.util.List;
@@ -22,4 +19,6 @@ public interface MoneyBookService {
     List<MoneyBook> getBillList(BillListReq billListReq);
 
     List<Map<String, Object>> getStatisticData(StatisticDataReq statisticDataReq);
+
+    List<Map<String, Object>> getCategoryStatistic(CategoryStatisticReq categoryStatisticReq);
 }

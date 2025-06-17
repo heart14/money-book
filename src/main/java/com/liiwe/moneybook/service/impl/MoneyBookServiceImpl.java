@@ -5,10 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.liiwe.moneybook.base.bean.domain.mb.BillListReq;
-import com.liiwe.moneybook.base.bean.domain.mb.StatisticDataReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountResp;
+import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
@@ -20,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wfli
@@ -311,5 +305,28 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         item.put("value", value);
         item.put("class", bgClass);
         resultList.add(item);
+    }
+
+
+    @Override
+    public List<Map<String, Object>> getCategoryStatistic(CategoryStatisticReq categoryStatisticReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (StrUtil.isBlank(categoryStatisticReq.getYear())) {
+            categoryStatisticReq.setYear(String.valueOf(DateUtil.year(new Date())));
+        }
+        if (StrUtil.isBlank(categoryStatisticReq.getBillType())) {
+            categoryStatisticReq.setBillType("支出");
+        }
+
+        List<Map<String, Object>> maps = moneyBookMapper.selectCategoryDataByYear(categoryStatisticReq.getYear(), categoryStatisticReq.getBillType(), name);
+        for (Map<String, Object> map : maps) {
+            BigDecimal decimal = (BigDecimal) map.get("totalAmount");
+            BigDecimal divide = decimal.divide(HUNDRED, 2, RoundingMode.HALF_UP);
+            String totalAmount = divide.toString();
+            map.put("totalAmount", totalAmount);
+        }
+        return maps;
     }
 }

@@ -1,9 +1,6 @@
 package com.liiwe.moneybook.controller;
 
-import com.liiwe.moneybook.base.bean.domain.mb.BillListReq;
-import com.liiwe.moneybook.base.bean.domain.mb.StatisticDataReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountReq;
-import com.liiwe.moneybook.base.bean.domain.mb.TotalAmountResp;
+import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.MoneyBookService;
@@ -67,6 +64,15 @@ public class MoneyBookController {
 
         List<Map<String, Object>> result = moneyBookService.getStatisticData(req);
         log.info("getStatisticData response: {}", result);
+        return SysResponse.success(result);
+    }
+
+    @GetMapping("/getCategoryStatistic")
+    public SysResponse getCategoryStatistic(CategoryStatisticReq req) {
+        log.info("getCategoryStatistic: {}", req);
+
+        List<Map<String, Object>> result = moneyBookService.getCategoryStatistic(req);
+        log.info("getCategoryStatistic response: {}", result);
         return SysResponse.success(result);
     }
 }
