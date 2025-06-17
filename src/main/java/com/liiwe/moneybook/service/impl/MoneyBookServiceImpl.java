@@ -298,7 +298,7 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         // 支出笔数
         addResultItem(result, "支出笔数", "&#xe70f", "bg-warning", expenseCountPct, BigDecimal.valueOf(expenseCount));
         // 结余
-        addResultItem(result, "结余", "", "bg-success", balancePct, balance.divide(HUNDRED, 2, RoundingMode.HALF_UP));
+        addResultItem(result, "结余", (balance.compareTo(BigDecimal.ZERO) > 0 ? "&#xe809;" : "&#xe80b;"), "bg-success", balancePct, balance.divide(HUNDRED, 2, RoundingMode.HALF_UP));
 
         return result;
     }
