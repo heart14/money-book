@@ -13,8 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryStatisticReq {
 
-    private String year;
+    /**
+     * 按年查询或者按月查询
+     */
+    private String conditionType;
 
+    /**
+     * 支出或收入
+     */
     private String billType;
 
     private String categoryId;

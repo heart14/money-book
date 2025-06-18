@@ -313,14 +313,25 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         // 获取当前登录用户的用户名
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (StrUtil.isBlank(categoryStatisticReq.getYear())) {
-            categoryStatisticReq.setYear(String.valueOf(DateUtil.year(new Date())));
+        // 使用hutool工具类获取当前日期
+        String today = DateUtil.today();
+        String year = today.substring(0, 4);
+        String month = today.substring(0, 7);
+
+        String queryDate = year;
+        if ("year".equals(categoryStatisticReq.getConditionType())) {
+            queryDate = year+"%";
+        }else
+        if ("month".equals(categoryStatisticReq.getConditionType())) {
+            queryDate = month+"%";
+        }else {
+            throw new IllegalArgumentException("统计口径参数错误");
         }
         if (StrUtil.isBlank(categoryStatisticReq.getBillType())) {
             categoryStatisticReq.setBillType("支出");
         }
 
-        List<Map<String, Object>> maps = moneyBookMapper.selectCategoryDataByYear(categoryStatisticReq.getYear(), categoryStatisticReq.getBillType(), name);
+        List<Map<String, Object>> maps = moneyBookMapper.selectCategoryData(queryDate, categoryStatisticReq.getBillType(), name);
         for (Map<String, Object> map : maps) {
             BigDecimal decimal = (BigDecimal) map.get("totalAmount");
             BigDecimal divide = decimal.divide(HUNDRED, 2, RoundingMode.HALF_UP);
