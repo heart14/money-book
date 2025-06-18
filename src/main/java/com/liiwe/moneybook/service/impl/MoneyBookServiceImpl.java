@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
+import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
@@ -17,7 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wfli
@@ -320,11 +324,10 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
         String queryDate = year;
         if ("year".equals(categoryStatisticReq.getConditionType())) {
-            queryDate = year+"%";
-        }else
-        if ("month".equals(categoryStatisticReq.getConditionType())) {
-            queryDate = month+"%";
-        }else {
+            queryDate = year + "%";
+        } else if ("month".equals(categoryStatisticReq.getConditionType())) {
+            queryDate = month + "%";
+        } else {
             throw new IllegalArgumentException("统计口径参数错误");
         }
         if (StrUtil.isBlank(categoryStatisticReq.getBillType())) {
@@ -339,5 +342,44 @@ public class MoneyBookServiceImpl implements MoneyBookService {
             map.put("totalAmount", totalAmount);
         }
         return maps;
+    }
+
+    @Override
+    public MonthlyDataResp getMonthlyData(StatisticDataReq statisticDataReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 使用hutool工具类获取当前日期
+        String today = DateUtil.today();
+        String year = today.substring(0, 4);
+        String month = today.substring(0, 7);
+
+        List<MonthlyMoneyRecord> monthlyMoneyRecords = moneyBookMapper.selectIncomeAndExpenseByCondition(
+                "year".equals(statisticDataReq.getConditionType()) ? year : month,
+                statisticDataReq.getConditionType(),
+                name
+        );
+
+        // 提取日期、收入和支出
+        List<String> dates = monthlyMoneyRecords.stream()
+                .map(MonthlyMoneyRecord::getDate)
+                .toList();
+
+        List<BigDecimal> totalIncomes = monthlyMoneyRecords.stream()
+                .map(record -> BigDecimal.valueOf(record.getTotalIncome())
+                        .divide(BigDecimal.valueOf(100L), 2, RoundingMode.HALF_UP))
+                .toList();
+
+        List<BigDecimal> totalExpenses = monthlyMoneyRecords.stream()
+                .map(record -> BigDecimal.valueOf(record.getTotalExpense())
+                        .divide(BigDecimal.valueOf(100L), 2, RoundingMode.HALF_UP))
+                .toList();
+
+        MonthlyDataResp result = new MonthlyDataResp();
+        result.setDate(dates);
+        result.setTotalIncome(totalIncomes);
+        result.setTotalExpense(totalExpenses);
+
+        return result;
     }
 }

@@ -2,6 +2,7 @@ package com.liiwe.moneybook.service;
 
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
+import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface MoneyBookService {
     List<Map<String, Object>> getStatisticData(StatisticDataReq statisticDataReq);
 
     List<Map<String, Object>> getCategoryStatistic(CategoryStatisticReq categoryStatisticReq);
+
+    MonthlyDataResp getMonthlyData(StatisticDataReq statisticDataReq);
 }

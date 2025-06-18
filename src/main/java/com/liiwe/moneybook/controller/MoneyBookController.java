@@ -2,6 +2,7 @@ package com.liiwe.moneybook.controller;
 
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
+import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,14 @@ public class MoneyBookController {
 
         List<Map<String, Object>> result = moneyBookService.getCategoryStatistic(req);
         log.info("getCategoryStatistic response: {}", result);
+        return SysResponse.success(result);
+    }
+    @GetMapping("/getMonthlyData")
+    public SysResponse getMonthlyData(StatisticDataReq req) {
+        log.info("getMonthlyData: {}", req);
+
+        MonthlyDataResp result = moneyBookService.getMonthlyData(req);
+        log.info("getMonthlyData response: {}", result);
         return SysResponse.success(result);
     }
 }

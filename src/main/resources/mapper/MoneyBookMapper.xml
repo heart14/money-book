@@ -15,5 +15,41 @@
         ORDER BY totalAmount desc
     </select>
 
+    <select id="selectIncomeAndExpenseByCondition" resultType="com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord">
+        <choose>
+            <!-- 当 conditionType 为 year 时，按年查询每月数据 -->
+            <when test="conditionType == 'year'">
+                SELECT
+                DATE_FORMAT(date, '%Y-%m') AS date,
+                SUM(CASE WHEN type = '收入' THEN stored_amount ELSE 0 END) AS total_income,
+                SUM(CASE WHEN type = '支出' THEN stored_amount ELSE 0 END) AS total_expense
+                FROM
+                t_money_book
+                WHERE username = #{username}
+                AND YEAR(date) = #{date}
+                GROUP BY
+                DATE_FORMAT(date, '%Y-%m')
+                ORDER BY
+                date;
+            </when>
+
+            <!-- 当 conditionType 为 month 时，按月查询每天数据 -->
+            <when test="conditionType == 'month'">
+                SELECT
+                DATE_FORMAT(date, '%Y-%m-%d') AS date,
+                SUM(CASE WHEN type = '收入' THEN stored_amount ELSE 0 END) AS total_income,
+                SUM(CASE WHEN type = '支出' THEN stored_amount ELSE 0 END) AS total_expense
+                FROM
+                t_money_book
+                WHERE username = #{username}
+                AND DATE_FORMAT(date, '%Y-%m') = #{date}
+                GROUP BY
+                DATE_FORMAT(date, '%Y-%m-%d')
+                ORDER BY
+                date;
+            </when>
+        </choose>
+    </select>
+
 
 </mapper>
