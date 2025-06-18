@@ -7,9 +7,11 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
+import com.liiwe.moneybook.base.bean.entity.SysCategory;
 import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.MoneyBookMapper;
+import com.liiwe.moneybook.mapper.SysCategoryMapper;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author wfli
@@ -36,8 +39,11 @@ public class MoneyBookServiceImpl implements MoneyBookService {
 
     private final MoneyBookMapper moneyBookMapper;
 
-    public MoneyBookServiceImpl(MoneyBookMapper moneyBookMapper) {
+    private final SysCategoryMapper categoryMapper;
+
+    public MoneyBookServiceImpl(MoneyBookMapper moneyBookMapper, SysCategoryMapper categoryMapper) {
         this.moneyBookMapper = moneyBookMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -155,9 +161,19 @@ public class MoneyBookServiceImpl implements MoneyBookService {
             wrapper.eq(MoneyBook::getCategory, billListReq.getCategoryId());
         }
 
+        LambdaQueryWrapper<SysCategory> categoryQueryWrapper = new LambdaQueryWrapper<>();
+        categoryQueryWrapper.eq(SysCategory::getIsLeaf, 1);
+        categoryQueryWrapper.eq(SysCategory::getIsActive, 1);
+
+        List<SysCategory> categoryList = categoryMapper.selectList(categoryQueryWrapper);
+
+
+        Map< Integer,String> categoryMap = categoryList.stream().collect(Collectors.toMap( SysCategory::getId,SysCategory::getName));
+
         List<MoneyBook> moneyBookList = moneyBookMapper.selectList(wrapper);
         for (MoneyBook moneyBook : moneyBookList) {
             moneyBook.setAmount(BigDecimal.valueOf(moneyBook.getStoredAmount()).divide(HUNDRED, 2, RoundingMode.HALF_UP).toString());
+            moneyBook.setCategoryName(categoryMap.get(moneyBook.getCategory()));
         }
 
         return moneyBookList;

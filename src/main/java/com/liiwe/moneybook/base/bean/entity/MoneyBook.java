@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -44,6 +45,9 @@ public class MoneyBook {
     private String type;
 
     private Integer category;
+
+    @TableField(exist = false)
+    private String categoryName;
 
     private String remark;
 
