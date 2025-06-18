@@ -8,6 +8,7 @@ import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.listener.MoneyBookImportListener;
 import com.liiwe.moneybook.service.DiaryBookService;
 import com.liiwe.moneybook.service.MoneyBookService;
+import com.liiwe.moneybook.service.SysCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,12 +30,13 @@ import java.util.List;
 public class SystemController {
 
     private final MoneyBookService moneyBookService;
-
     private final DiaryBookService diaryBookService;
+    private final SysCategoryService categoryService;
 
-    public SystemController(MoneyBookService moneyBookService, DiaryBookService diaryBookService) {
+    public SystemController(MoneyBookService moneyBookService, DiaryBookService diaryBookService, SysCategoryService categoryService) {
         this.moneyBookService = moneyBookService;
         this.diaryBookService = diaryBookService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping("/import")
@@ -43,7 +45,7 @@ public class SystemController {
 
         log.info("test import, {}", file.getOriginalFilename());
 
-        MoneyBookImportListener listener = new MoneyBookImportListener();
+        MoneyBookImportListener listener = new MoneyBookImportListener(categoryService);
         try {
             EasyExcel.read(file.getInputStream(), MoneyBookImportTemplate.class, listener).sheet(sheet).doRead();
         } catch (IOException e) {

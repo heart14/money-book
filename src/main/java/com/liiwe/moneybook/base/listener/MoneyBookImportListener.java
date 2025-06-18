@@ -6,13 +6,15 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.liiwe.moneybook.base.bean.entity.DiaryBook;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
+import com.liiwe.moneybook.base.bean.entity.SysCategory;
 import com.liiwe.moneybook.base.bean.model.MoneyBookImportTemplate;
+import com.liiwe.moneybook.mapper.SysCategoryMapper;
+import com.liiwe.moneybook.service.SysCategoryService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wfli
@@ -21,7 +23,13 @@ import java.util.List;
 @Slf4j
 public class MoneyBookImportListener extends AnalysisEventListener<MoneyBookImportTemplate> {
 
+    private final SysCategoryService categoryService;
+
     private final List<MoneyBookImportTemplate> records = new ArrayList<>();
+
+    public MoneyBookImportListener(SysCategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @Override
     public void invoke(MoneyBookImportTemplate moneyBookImportTemplate, AnalysisContext analysisContext) {
@@ -72,7 +80,8 @@ public class MoneyBookImportListener extends AnalysisEventListener<MoneyBookImpo
                 moneyBook.setDate(record.getDate().replace(".", "-"));
             }
             moneyBook.setTitle(record.getTitle());
-            moneyBook.setCategory(record.getCategory());
+            moneyBook.setType("支出");// todo 模板导入时，需要写死该类型
+            moneyBook.setCategory(transferCategory(record.getCategory()));
             moneyBook.setAmount(record.getAmount());
             moneyBook.setStoredAmount(new BigDecimal(record.getAmount()).multiply(new BigDecimal("100")).longValue());
             moneyBook.setRemark(record.getRemark());
@@ -85,4 +94,14 @@ public class MoneyBookImportListener extends AnalysisEventListener<MoneyBookImpo
         }
         return list;
     }
+
+
+    private int transferCategory(String cateName) {
+        // excel模板导入时，填写的是分类名，存储时是分类id
+        List<SysCategory> sysCategoryList = categoryService.getLeafCategoryList();
+        Map<String, Integer> categoryMap = sysCategoryList.stream()
+                .collect(Collectors.toMap(SysCategory::getName, SysCategory::getId));
+        return categoryMap.getOrDefault(cateName, -1);
+    }
+
 }

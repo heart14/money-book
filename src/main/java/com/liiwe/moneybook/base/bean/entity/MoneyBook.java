@@ -43,7 +43,7 @@ public class MoneyBook {
 
     private String type;
 
-    private String category;
+    private Integer category;
 
     private String remark;
 
