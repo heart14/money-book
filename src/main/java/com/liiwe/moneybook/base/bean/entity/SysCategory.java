@@ -30,7 +30,9 @@ public class SysCategory {
 
     private Integer isActive;
 
-    private String path;
+    private String fullPath;
+
+    private String namePath;
 
     private String detail;
 
