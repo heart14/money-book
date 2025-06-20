@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.entity.SysCategory;
@@ -55,6 +56,63 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         for (MoneyBook moneyBook : list) {
             moneyBookMapper.insert(moneyBook);
         }
+    }
+
+    @Override
+    public Page<MoneyBook> getPageList(PageListReq pageListReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Page<MoneyBook> page = new Page<>(pageListReq.getCurrent(), pageListReq.getSize());
+        LambdaQueryWrapper<MoneyBook> wrapper = new LambdaQueryWrapper<>();
+
+        if (pageListReq.getCategoryId() != null && pageListReq.getCategoryId() != -1) {
+            wrapper.eq(MoneyBook::getCategory, pageListReq.getCategoryId());
+        }
+        if (StrUtil.isNotBlank(pageListReq.getDate())) {
+            if (pageListReq.getDate().length() > 7) {
+                wrapper.eq(MoneyBook::getDate, pageListReq.getDate());
+            } else {
+                wrapper.like(MoneyBook::getDate, pageListReq.getDate());
+            }
+        } else {
+            // date和dateRange同时存在时，优先查询date
+            // mybatis-plus gt:大于, lt:小于, ge:大于等于, le:小于等于
+            if (StrUtil.isNotBlank(pageListReq.getDateRangeStart())) {
+                wrapper.ge(MoneyBook::getDate, pageListReq.getDateRangeStart());
+            }
+            if (StrUtil.isNotBlank(pageListReq.getDateRangeEnd())) {
+                wrapper.le(MoneyBook::getDate, pageListReq.getDateRangeEnd());
+            }
+        }
+        if (StrUtil.isNotBlank(pageListReq.getTitle())) {
+            wrapper.like(MoneyBook::getTitle, pageListReq.getTitle());
+        }
+        if (StrUtil.isNotBlank(pageListReq.getType())) {
+            wrapper.eq(MoneyBook::getType, pageListReq.getType());
+        }
+
+        wrapper.eq(MoneyBook::getUsername, name);
+        wrapper.orderByDesc(MoneyBook::getRecordTime);
+
+        Page<MoneyBook> selectPage = moneyBookMapper.selectPage(page, wrapper);
+
+        List<MoneyBook> records = selectPage.getRecords();
+
+        // 查询所有分类信息
+        LambdaQueryWrapper<SysCategory> categoryQueryWrapper = new LambdaQueryWrapper<>();
+        categoryQueryWrapper.eq(SysCategory::getIsLeaf, 1);
+        categoryQueryWrapper.eq(SysCategory::getIsActive, 1);
+
+        List<SysCategory> categoryList = categoryMapper.selectList(categoryQueryWrapper);
+        Map<Integer, String> categoryMap = categoryList.stream().collect(Collectors.toMap(SysCategory::getId, SysCategory::getNamePath));
+
+        for (MoneyBook record : records) {
+            record.setAmount(BigDecimal.valueOf(record.getStoredAmount()).divide(HUNDRED, 2, RoundingMode.HALF_UP).toString());
+            record.setCategoryName(categoryMap.get(record.getCategory()));
+        }
+
+        return selectPage;
     }
 
     @Override
@@ -168,7 +226,7 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         List<SysCategory> categoryList = categoryMapper.selectList(categoryQueryWrapper);
 
 
-        Map< Integer,String> categoryMap = categoryList.stream().collect(Collectors.toMap( SysCategory::getId,SysCategory::getName));
+        Map<Integer, String> categoryMap = categoryList.stream().collect(Collectors.toMap(SysCategory::getId, SysCategory::getName));
 
         List<MoneyBook> moneyBookList = moneyBookMapper.selectList(wrapper);
         for (MoneyBook moneyBook : moneyBookList) {

@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
@@ -14,6 +15,8 @@ import java.util.Map;
 public interface MoneyBookService {
 
     void importMoneyBook(List<MoneyBook> list);
+
+    Page<MoneyBook> getPageList(PageListReq pageListReq);
 
     TotalAmountResp getTotalAmount(TotalAmountReq totalAmountReq);
 

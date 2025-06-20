@@ -1,8 +1,8 @@
 package com.liiwe.moneybook.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.mb.*;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
-import com.liiwe.moneybook.base.bean.model.MonthlyMoneyRecord;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,22 @@ public class MoneyBookController {
     public MoneyBookController(MoneyBookService moneyBookService) {
         this.moneyBookService = moneyBookService;
     }
+
+    /**
+     * 分页查询记账数据
+     *
+     * @param
+     */
+    @GetMapping("/getPageList")
+    public SysResponse getPageList(PageListReq req) {
+        log.info("getPageList: {}", req);
+        Page<MoneyBook> pageList = moneyBookService.getPageList(req);
+        log.info("getPageList response: {}", pageList);
+
+        return SysResponse.success(pageList);
+    }
+
+
 
     /**
      * 按日期查询总支出与收入数据
