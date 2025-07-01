@@ -59,6 +59,10 @@ public class MoneyBook {
 
     private String username;
 
+    private String note;
+
+    private String tag;
+
 //    public String getAmount() {
 //        return BigDecimal.valueOf(this.storedAmount).divide(BigDecimal.valueOf(100L),2, RoundingMode.HALF_UP).toString();
 //    }

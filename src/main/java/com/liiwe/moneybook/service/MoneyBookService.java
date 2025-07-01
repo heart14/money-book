@@ -27,4 +27,8 @@ public interface MoneyBookService {
     List<Map<String, Object>> getCategoryStatistic(CategoryStatisticReq categoryStatisticReq);
 
     MonthlyDataResp getMonthlyData(StatisticDataReq statisticDataReq);
+
+    void saveMoneyBook(MoneyBookReq moneyBookReq);
+
+    void editMoneyBook(MoneyBook moneyBook);
 }

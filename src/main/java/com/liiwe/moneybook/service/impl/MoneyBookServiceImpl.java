@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -455,5 +452,54 @@ public class MoneyBookServiceImpl implements MoneyBookService {
         result.setTotalExpense(totalExpenses);
 
         return result;
+    }
+
+    @Override
+    public void saveMoneyBook(MoneyBookReq moneyBookReq) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        MoneyBook moneyBook = new MoneyBook();
+
+        if (moneyBookReq.getDatetime() == null || moneyBookReq.getDatetime().length() < 10) {
+            throw new IllegalArgumentException("参数有误");
+        }
+
+        moneyBook.setDate(moneyBookReq.getDatetime().substring(0, 10));
+        moneyBook.setTitle(moneyBookReq.getTitle());
+        moneyBook.setStoredAmount(new BigDecimal(moneyBookReq.getAmount()).multiply(HUNDRED).longValue());
+        moneyBook.setType(moneyBookReq.getType());
+        moneyBook.setCategory(moneyBookReq.getCategoryId());
+        moneyBook.setRemark(moneyBookReq.getRemark());
+        moneyBook.setCreateTime(new Date());
+        moneyBook.setRecordTime(DateUtil.parse(moneyBookReq.getDatetime()));
+        moneyBook.setUsername(name);
+
+        int insert = moneyBookMapper.insert(moneyBook);
+        if (insert != 1) {
+            throw new RuntimeException("保存失败");
+        }
+    }
+
+    @Override
+    public void editMoneyBook(MoneyBook moneyBook) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        MoneyBook selectById = moneyBookMapper.selectById(moneyBook.getId());
+        if (selectById == null) {
+            throw new RuntimeException("记录不存在");
+        }
+        if (!name.equals(selectById.getUsername())) {
+            throw new RuntimeException("无法修改其它用户数据");
+        }
+
+        selectById.setTitle(moneyBook.getTitle());
+        selectById.setCategory(moneyBook.getCategory());
+        selectById.setRemark(moneyBook.getRemark());
+
+        int update = moneyBookMapper.updateById(selectById);
+        if (update != 1) {
+            throw new RuntimeException("更新失败");
+        }
     }
 }

@@ -6,11 +6,8 @@ import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.MoneyBookService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +39,6 @@ public class MoneyBookController {
 
         return SysResponse.success(pageList);
     }
-
 
 
     /**
@@ -93,6 +89,7 @@ public class MoneyBookController {
         log.info("getCategoryStatistic response: {}", result);
         return SysResponse.success(result);
     }
+
     @GetMapping("/getMonthlyData")
     public SysResponse getMonthlyData(StatisticDataReq req) {
         log.info("getMonthlyData: {}", req);
@@ -100,5 +97,20 @@ public class MoneyBookController {
         MonthlyDataResp result = moneyBookService.getMonthlyData(req);
         log.info("getMonthlyData response: {}", result);
         return SysResponse.success(result);
+    }
+
+
+    @PostMapping("/save")
+    public SysResponse save(@RequestBody MoneyBookReq req) {
+        log.info("save moneyBook: {}", req);
+        moneyBookService.saveMoneyBook(req);
+        return SysResponse.success();
+    }
+
+    @PostMapping("/edit")
+    public SysResponse edit(@RequestBody MoneyBook req) {
+        log.info("edit moneyBook: {}", req);
+        moneyBookService.editMoneyBook(req);
+        return SysResponse.success();
     }
 }
