@@ -1,5 +1,7 @@
 package com.liiwe.moneybook.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.liiwe.moneybook.base.bean.entity.DiaryBook;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
@@ -59,5 +61,20 @@ public class SystemController {
         diaryBookService.importDiaryBook(diaryBookList);
 
         return SysResponse.success(moneyBookList);
+    }
+
+    @PostMapping("/screen")
+    public SysResponse screen(String title, String amount, String time, String type, String category, String remark) {
+
+        log.info("screen :{}, {}, {}", amount, title, time);
+        DateTime parse;
+        if (time.contains("年")) {
+            parse = DateUtil.parse(time, "yyyy年MM月dd日 hh:mm:ss");
+        } else {
+            parse = DateUtil.parse(time, "yyyy-MM-dd hh:mm:ss");
+        }
+        log.info("time:{}", parse);
+
+        return SysResponse.success();
     }
 }
