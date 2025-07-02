@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // 放行所有以"/auth/"开头的请求
                         .requestMatchers("/test/**").permitAll() // 放行所有以"/test/"开头的请求
+                        .requestMatchers("/sys/screen").permitAll() // 放行手机上送的请求
                         .anyRequest().authenticated() // 其他所有请求都需要认证
                 );
         // 在UsernamePasswordAuthenticationFilter之前添加JWT认证过滤器
