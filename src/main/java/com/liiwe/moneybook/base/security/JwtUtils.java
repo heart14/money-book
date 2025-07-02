@@ -19,7 +19,7 @@ public class JwtUtils {
     // 加密密钥
     private static String secretKey = "mb";
     // 访问TOKEN过期时间，单位毫秒
-    public static final long ACCESS_EXPIRE = 30 * 60 * 1000; // 30分钟
+    public static final long ACCESS_EXPIRE = 24* 30 * 60 * 1000; // 30分钟
     // 刷新TOKEN过期时间，单位毫秒
     public static final long REFRESH_EXPIRE = 7 * 24 * 60 * 60 * 1000; // 7天
 
