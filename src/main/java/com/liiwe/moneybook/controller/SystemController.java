@@ -3,11 +3,13 @@ package com.liiwe.moneybook.controller;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
+import com.liiwe.moneybook.base.bean.domain.mb.MoneyBookReq;
 import com.liiwe.moneybook.base.bean.entity.DiaryBook;
 import com.liiwe.moneybook.base.bean.entity.MoneyBook;
 import com.liiwe.moneybook.base.bean.model.MoneyBookImportTemplate;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.listener.MoneyBookImportListener;
+import com.liiwe.moneybook.base.utils.CategoryMappingUtil;
 import com.liiwe.moneybook.service.DiaryBookService;
 import com.liiwe.moneybook.service.MoneyBookService;
 import com.liiwe.moneybook.service.SysCategoryService;
@@ -33,12 +35,12 @@ public class SystemController {
 
     private final MoneyBookService moneyBookService;
     private final DiaryBookService diaryBookService;
-    private final SysCategoryService categoryService;
+    private final CategoryMappingUtil categoryMappingUtil;
 
-    public SystemController(MoneyBookService moneyBookService, DiaryBookService diaryBookService, SysCategoryService categoryService) {
+    public SystemController(MoneyBookService moneyBookService, DiaryBookService diaryBookService,  CategoryMappingUtil categoryMappingUtil) {
         this.moneyBookService = moneyBookService;
         this.diaryBookService = diaryBookService;
-        this.categoryService = categoryService;
+        this.categoryMappingUtil = categoryMappingUtil;
     }
 
     @PostMapping("/import")
@@ -47,7 +49,7 @@ public class SystemController {
 
         log.info("test import, {}", file.getOriginalFilename());
 
-        MoneyBookImportListener listener = new MoneyBookImportListener(categoryService);
+        MoneyBookImportListener listener = new MoneyBookImportListener(categoryMappingUtil);
         try {
             EasyExcel.read(file.getInputStream(), MoneyBookImportTemplate.class, listener).sheet(sheet).doRead();
         } catch (IOException e) {
@@ -64,9 +66,8 @@ public class SystemController {
     }
 
     @PostMapping("/screen")
-    public SysResponse screen(String title, String amount, String time, String type, String category, String remark) {
+    public SysResponse screen(String title, String amount, String time, String type, String category, String remark, String username) {
 
-        log.info("screen :{}, {}, {}", amount, title, time);
         DateTime parse;
         if (time.contains("年")) {
             parse = DateUtil.parse(time, "yyyy年MM月dd日 hh:mm:ss");
@@ -74,6 +75,22 @@ public class SystemController {
             parse = DateUtil.parse(time, "yyyy-MM-dd hh:mm:ss");
         }
         log.info("time:{}", parse);
+
+        int categoryId = categoryMappingUtil.getCategoryId(category);
+
+
+        MoneyBookReq moneyBookReq = new MoneyBookReq();
+        moneyBookReq.setTitle(title);
+        moneyBookReq.setAmount(amount);
+        moneyBookReq.setDatetime(DateUtil.format(parse, "yyyy-MM-dd hh:mm:ss"));
+        moneyBookReq.setType(type);
+        moneyBookReq.setCategoryId(categoryId);
+        moneyBookReq.setRemark(remark);
+        moneyBookReq.setUsername(username);
+
+        log.info("save from mobile:{}", moneyBookReq);
+
+        moneyBookService.saveMoneyBook(moneyBookReq, true);
 
         return SysResponse.success();
     }

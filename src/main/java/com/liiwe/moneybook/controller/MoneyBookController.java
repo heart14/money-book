@@ -103,7 +103,7 @@ public class MoneyBookController {
     @PostMapping("/save")
     public SysResponse save(@RequestBody MoneyBookReq req) {
         log.info("save moneyBook: {}", req);
-        moneyBookService.saveMoneyBook(req);
+        moneyBookService.saveMoneyBook(req,false);
         return SysResponse.success();
     }
 

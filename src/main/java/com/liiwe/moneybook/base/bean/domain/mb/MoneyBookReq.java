@@ -20,6 +20,9 @@ public class MoneyBookReq {
 
     private String title;
 
+    /**
+     * 金额，单位元
+     */
     private String amount;
 
     private String type;
@@ -30,4 +33,6 @@ public class MoneyBookReq {
     private Integer categoryId;
 
     private String remark;
+
+    private String username;
 }
