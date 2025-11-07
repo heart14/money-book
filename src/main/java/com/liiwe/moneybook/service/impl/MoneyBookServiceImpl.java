@@ -455,9 +455,14 @@ public class MoneyBookServiceImpl implements MoneyBookService {
     }
 
     @Override
-    public void saveMoneyBook(MoneyBookReq moneyBookReq) {
+    public void saveMoneyBook(MoneyBookReq moneyBookReq, boolean fromMobile) {
         // 获取当前登录用户的用户名
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        String name;
+        if (fromMobile) {
+            name = moneyBookReq.getUsername();
+        } else {
+            name = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
         MoneyBook moneyBook = new MoneyBook();
 
         if (moneyBookReq.getDatetime() == null || moneyBookReq.getDatetime().length() < 10) {

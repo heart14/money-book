@@ -28,7 +28,7 @@ public interface MoneyBookService {
 
     MonthlyDataResp getMonthlyData(StatisticDataReq statisticDataReq);
 
-    void saveMoneyBook(MoneyBookReq moneyBookReq);
+    void saveMoneyBook(MoneyBookReq moneyBookReq,boolean fromMobile);
 
     void editMoneyBook(MoneyBook moneyBook);
 }
