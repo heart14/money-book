@@ -1,7 +1,9 @@
 package com.liiwe.moneybook.controller;
 
+import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
+import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lwf14
@@ -18,6 +21,12 @@ import java.util.ArrayList;
 @RequestMapping("/dashboard")
 @RestController
 public class DashboardController {
+
+    public final DashboardService dashboardService;
+
+    public DashboardController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
+    }
 
     @GetMapping("/cardListData")
     public SysResponse fetchStatCardList() {
@@ -34,5 +43,11 @@ public class DashboardController {
         list.add(item_4);
 
         return SysResponse.success(list);
+    }
+
+    @GetMapping("/monthlyIncome")
+    public SysResponse fetchMonthlyIncome(){
+        List<MonthlyIncome> monthlyIncome = dashboardService.getMonthlyIncome();
+        return SysResponse.success(monthlyIncome);
     }
 }
