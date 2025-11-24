@@ -31,8 +31,9 @@ public class Constants {
         }
     };
 
-    public static class BillType{
-        public static final String EXPENSE = "支出";
-        public static final String INCOME = "收入";
+    public static class TransType {
+        public static final int BOTH = 3;
+        public static final int EXPENSE = 2;
+        public static final int INCOME = 1;
     }
 }
