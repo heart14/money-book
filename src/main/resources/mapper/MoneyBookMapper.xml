@@ -5,12 +5,12 @@
 <mapper namespace="com.liiwe.moneybook.mapper.MoneyBookMapper">
 
     <select id="selectCategoryData" parameterType="java.lang.String" resultType="java.util.Map">
-        SELECT t.`category` "categoryId",c.`name` "categoryName",SUM(t.`stored_amount`) "totalAmount"
+        SELECT t.`category` "categoryId", c.`name` "categoryName", SUM(t.`stored_amount`) "totalAmount"
         FROM `t_money_book` t
-        LEFT JOIN `t_category` c ON c.`id` = t.`category`
+                 LEFT JOIN `t_category` c ON c.`id` = t.`category`
         WHERE t.`date` like #{date}
-        AND t.`username`  = #{username}
-        AND t.`type`  = #{type}
+          AND t.`username` = #{username}
+          AND t.`type` = #{type}
         GROUP BY t.`category`
         ORDER BY totalAmount desc
     </select>
