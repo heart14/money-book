@@ -1,7 +1,7 @@
 package com.liiwe.moneybook.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.liiwe.moneybook.base.bean.entity.SysCategory;
+import com.liiwe.moneybook.base.bean.entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2025/6/18 16:45
  */
 @Mapper
-public interface SysCategoryMapper extends BaseMapper<SysCategory> {
+public interface CategoryMapper extends BaseMapper<Category> {
 }
