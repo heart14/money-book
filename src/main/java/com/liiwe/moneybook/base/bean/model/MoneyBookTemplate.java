@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MoneyBookImportTemplate {
+public class MoneyBookTemplate {
 
     @ExcelProperty(value = "日期", index = 0)
     private String date;
