@@ -4,7 +4,7 @@ import com.liiwe.moneybook.base.bean.domain.auth.LoginReq;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.security.JwtUtils;
-import com.liiwe.moneybook.service.SysUserService;
+import com.liiwe.moneybook.service.biz.AuthService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +21,12 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final SysUserService userService;
+    private final AuthService authService;
 
     private final JwtUtils jwtUtils;
 
-    public AuthController(SysUserService userService, JwtUtils jwtUtils) {
-        this.userService = userService;
+    public AuthController(AuthService authService, JwtUtils jwtUtils) {
+        this.authService = authService;
         this.jwtUtils = jwtUtils;
     }
 
@@ -34,7 +34,7 @@ public class AuthController {
     public SysResponse login(@RequestBody LoginReq loginReq) {
         log.info("system login: {}", loginReq);
 
-        SysUser sysUser = userService.login(loginReq.getUsername(), loginReq.getPassword());
+        SysUser sysUser = authService.login(loginReq.getUsername(), loginReq.getPassword());
 
         Map<String, String> data = new HashMap<>();
         data.put("token", jwtUtils.generateAccessToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
@@ -49,7 +49,7 @@ public class AuthController {
     public SysResponse register(@RequestBody LoginReq loginReq) {
         log.info("system register: {}", loginReq);
 
-        userService.register(loginReq.getUsername(), loginReq.getPassword());
+        authService.register(loginReq.getUsername(), loginReq.getPassword());
         return SysResponse.success();
     }
 
