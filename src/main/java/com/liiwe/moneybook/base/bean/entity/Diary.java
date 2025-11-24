@@ -33,7 +33,7 @@ public class Diary extends BaseEntity {
     private String content;
 
     /**
-     * 用户uid
+     * 用户
      */
-    private Long uid;
+    private String username;
 }

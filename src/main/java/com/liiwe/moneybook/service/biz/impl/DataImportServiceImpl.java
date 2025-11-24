@@ -12,6 +12,7 @@ import com.liiwe.moneybook.mapper.DiaryMapper;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DataImportService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,13 +56,14 @@ public class DataImportServiceImpl implements DataImportService {
     }
 
     private List<Diary> getDiaryList(List<MoneyBookTemplate> templateList) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
         List<Diary> list = new ArrayList<>();
         for (MoneyBookTemplate record : templateList) {
             if (StrUtil.isNotBlank(record.getDiary())) {
                 Diary diary = new Diary();
                 diary.setDate(record.getDate().replace(".", "-"));
                 diary.setContent(record.getDiary());
-                diary.setUid(3L);
+                diary.setUsername(name);
                 list.add(diary);
             }
         }
@@ -69,6 +71,7 @@ public class DataImportServiceImpl implements DataImportService {
     }
 
     private List<Transaction> getTransList(List<MoneyBookTemplate> templateList) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
         // 创建一个空的列表来存储处理后的数据
         List<Transaction> list = new ArrayList<>();
 
@@ -91,7 +94,7 @@ public class DataImportServiceImpl implements DataImportService {
             transaction.setAmount(new BigDecimal(record.getAmount()));
             transaction.setType(Constants.TransType.EXPENSE);// 模板导入固定为支出
             transaction.setCid(getCidByName(record.getCategory()));
-            transaction.setUid(3L);
+            transaction.setUsername(name);
             transaction.setRemark(record.getRemark());
             transaction.setRecordTime(date);
             // 如果当前记录的日期为空，说明这是合并单元格的记录，与 lastRecord 是同一天

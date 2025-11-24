@@ -49,9 +49,9 @@ public class Transaction extends BaseEntity {
     private Long cid;
 
     /**
-     * 用户id，关联T_SYS_USER表
+     * 用户username
      */
-    private Long uid;
+    private String username;;
 
     /**
      * 备注

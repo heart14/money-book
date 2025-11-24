@@ -4,11 +4,11 @@
 <mapper namespace="com.liiwe.moneybook.mapper.TransactionMapper">
 
     <insert id="batchInsertTransaction" parameterType="java.util.List">
-        INSERT INTO diary (`title`,`amount`,`type`,`cid`,`uid`,`remark`,`trans_time`,`record_time`,`create_at`)
+        INSERT INTO t_transaction (`title`,`amount`,`type`,`cid`,`username`,`remark`,`trans_time`,`record_time`,`create_at`)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.title}, #{item.amount}, #{item.type}, #{item.cid}, #{item.uid}, #{item.remark}, #{item.transTime},
-            #{item.recordTime}, sysdate)
+            (#{item.title}, #{item.amount}, #{item.type}, #{item.cid}, #{item.username}, #{item.remark}, #{item.transTime},
+            #{item.recordTime}, now())
         </foreach>
     </insert>
 
