@@ -5,35 +5,35 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @author wfli
- * @since 2025/6/18 16:45
+ * @author lwf14
+ * @since 2025/11/20 10:16
  */
-@TableName("t_category")
+@TableName("T_DIARY")
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SysCategory {
+public class Diary extends BaseEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private String name;
+    /**
+     * 日期
+     */
+    private String date;
 
-    private Integer parentId;
+    /**
+     * 内容
+     */
+    private String content;
 
-    private Integer level;
-
-    private Integer isLeaf;
-
-    private Integer isActive;
-
-    private String fullPath;
-
-    private String namePath;
-
-    private String detail;
-
+    /**
+     * 用户uid
+     */
+    private Long uid;
 }
