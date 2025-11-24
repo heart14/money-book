@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 总收入&支出查询请求参数
+ *
  * @author wfli
  * @since 2025/6/13 13:43
  */

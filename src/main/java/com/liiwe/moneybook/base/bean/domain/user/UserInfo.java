@@ -1,6 +1,5 @@
 package com.liiwe.moneybook.base.bean.domain.user;
 
-import com.liiwe.moneybook.base.bean.entity.SysRole;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;

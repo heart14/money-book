@@ -2,7 +2,7 @@ package com.liiwe.moneybook.controller;
 
 import com.liiwe.moneybook.base.bean.domain.user.UserInfo;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
-import com.liiwe.moneybook.service.SysUserService;
+import com.liiwe.moneybook.service.base.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
