@@ -1,6 +1,8 @@
 package com.liiwe.moneybook.base.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,16 +18,16 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    // 加密密钥
-    private static String secretKey = "mb";
     // 访问TOKEN过期时间，单位毫秒
-    public static final long ACCESS_EXPIRE = 24* 30 * 60 * 1000; // 30分钟
+    public static final long ACCESS_EXPIRE = 24 * 30 * 60 * 1000; // 30分钟
     // 刷新TOKEN过期时间，单位毫秒
     public static final long REFRESH_EXPIRE = 7 * 24 * 60 * 60 * 1000; // 7天
-
+    // 加密密钥
+    private static String secretKey = "mb";
 
     /**
      * 初始化签名密钥
+     *
      * @return
      */
     private SecretKey generateKey() {
@@ -44,6 +46,7 @@ public class JwtUtils {
 
     /**
      * 生成访问TOKEN
+     *
      * @param uid
      * @param username
      * @return
@@ -60,6 +63,7 @@ public class JwtUtils {
 
     /**
      * 生成刷新TOKEN
+     *
      * @param uid
      * @param username
      * @return
@@ -74,17 +78,18 @@ public class JwtUtils {
                 .compact();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token);
             return true;
-        } catch (JwtException|IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
     /**
      * 解析TOKEN
+     *
      * @param token
      * @return
      */
@@ -98,6 +103,7 @@ public class JwtUtils {
 
     /**
      * 解析TOKEN，提取用户名
+     *
      * @param token
      * @return
      */

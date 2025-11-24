@@ -6,7 +6,9 @@
     <!-- 定义日志输出到控制台的 Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd' 'HH:mm:ss.SSS} %green(%-5p) %magenta(${PID:- }) --- [%15t] %cyan(%-48C{48}%4L) : %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd' 'HH:mm:ss.SSS} %green(%-5p) %magenta(${PID:- }) --- [%15t] %cyan(%-48C{48}%4L) :
+                %m%n
+            </pattern>
         </encoder>
     </appender>
 
@@ -23,8 +25,8 @@
 
     <!-- 根 Logger 配置 -->
     <root level="${LOG_LEVEL}">
-        <appender-ref ref="CONSOLE" />
-<!--        <appender-ref ref="FILE" />-->
+        <appender-ref ref="CONSOLE"/>
+        <!--        <appender-ref ref="FILE" />-->
     </root>
 
     <!-- 其他 Logger 配置 -->

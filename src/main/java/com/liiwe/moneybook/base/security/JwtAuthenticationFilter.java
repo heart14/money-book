@@ -1,28 +1,20 @@
 package com.liiwe.moneybook.base.security;
 
 // 导入必要的Servlet过滤器相关类
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-// 导入日志记录库
 import lombok.extern.slf4j.Slf4j;
-
-// 导入Spring Security相关类
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-
-// 导入Spring框架组件注解
 import org.springframework.stereotype.Component;
-
-// 导入Web过滤器基类
 import org.springframework.web.filter.OncePerRequestFilter;
 
-// 导入IO异常处理类
 import java.io.IOException;
 
 /**
