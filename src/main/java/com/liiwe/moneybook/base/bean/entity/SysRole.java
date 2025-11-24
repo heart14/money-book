@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @TableName("t_sys_role")
 public class SysRole {
 
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private String role;

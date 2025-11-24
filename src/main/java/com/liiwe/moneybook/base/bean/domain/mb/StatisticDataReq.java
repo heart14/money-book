@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class StatisticDataReq {
 
     /**
-     *  year | month
+     * year | month
      */
     private String conditionType;
 }
