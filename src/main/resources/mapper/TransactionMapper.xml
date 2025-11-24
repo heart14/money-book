@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.liiwe.moneybook.mapper.SysRoleMapper">
+<mapper namespace="com.liiwe.moneybook.mapper.TransactionMapper">
 
+    <insert id="batchInsertTransaction" parameterType="java.util.List">
+        INSERT INTO diary (`title`,`amount`,`type`,`cid`,`uid`,`remark`,`trans_time`,`record_time`,`create_at`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.title}, #{item.amount}, #{item.type}, #{item.cid}, #{item.uid}, #{item.remark}, #{item.transTime},
+            #{item.recordTime}, sysdate)
+        </foreach>
+    </insert>
 
 </mapper>
