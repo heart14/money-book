@@ -22,17 +22,17 @@ import java.io.IOException;
  * @since 2025/6/9 15:22
  */
 @RestController
-@RequestMapping("/sys")
+@RequestMapping("/import")
 @Slf4j
-public class SystemController {
+public class DataImportController {
 
     private final DataImportService dataImportService;
 
-    public SystemController(DataImportService dataImportService) {
+    public DataImportController(DataImportService dataImportService) {
         this.dataImportService = dataImportService;
     }
 
-    @PostMapping("/import")
+    @PostMapping("/excel")
     public SysResponse importFromExcel(@RequestBody MultipartFile file, String sheet) {
         log.info("test import, {}", file.getOriginalFilename());
         MoneyBookImportListener listener = new MoneyBookImportListener();
