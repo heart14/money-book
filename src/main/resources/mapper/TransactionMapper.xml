@@ -22,5 +22,14 @@
         GROUP BY month
         ORDER BY month
     </select>
+    
+    <select id="statCardData" resultType="com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto">
+        SELECT SUM(CASE WHEN type = 1 THEN amount ELSE 0 END) AS totalIncome,
+               SUM(CASE WHEN type = 2 THEN amount ELSE 0 END) AS totalExpense,
+               SUM(CASE WHEN type = 3 THEN amount ELSE 0 END) AS totalBoth
+        FROM T_TRANSACTION
+        WHERE YEAR (trans_time) = #{year}
+          AND `username` = #{username}
+    </select>
 
 </mapper>
