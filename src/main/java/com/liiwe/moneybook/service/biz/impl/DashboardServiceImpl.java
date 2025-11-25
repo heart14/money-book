@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
+import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyExpense;
 import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
 import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
@@ -53,6 +54,24 @@ public class DashboardServiceImpl implements DashboardService {
             }
         }
         return monthlyIncomeList;
+    }
+
+    @Override
+    public List<MonthlyExpense> getMonthlyExpense(String year) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<MonthlyTotalAmountDto> dtoList = transactionMapper.statMonthlyTotalAmount(name, currentYear, Constants.TransType.EXPENSE);
+        List<MonthlyExpense> monthlyExpenseList = new ArrayList<>();
+        if (dtoList != null) {
+            for (MonthlyTotalAmountDto dto : dtoList) {
+                MonthlyExpense monthlyExpense = new MonthlyExpense();
+                monthlyExpense.setMonth(dto.getMonth());
+                monthlyExpense.setTotalExpense(dto.getTotalAmount());
+                monthlyExpenseList.add(monthlyExpense);
+            }
+        }
+        return monthlyExpenseList;
     }
 
     @Override
