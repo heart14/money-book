@@ -28,13 +28,13 @@ public class DashboardController {
 
     @GetMapping("/cardListData")
     public SysResponse fetchStatCardList() {
-        List<StatCard> cardList = dashboardService.getStatCardData("2025");
+        List<StatCard> cardList = dashboardService.getStatCardData(null);
         return SysResponse.success(cardList);
     }
 
     @GetMapping("/monthlyIncome")
     public SysResponse fetchMonthlyIncome() {
-        List<MonthlyIncome> monthlyIncome = dashboardService.getMonthlyIncome();
+        List<MonthlyIncome> monthlyIncome = dashboardService.getMonthlyIncome(null);
         return SysResponse.success(monthlyIncome);
     }
 }

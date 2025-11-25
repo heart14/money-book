@@ -25,7 +25,7 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
      * @param transType 交易类型
      * @return MonthlyTotalAmountDto
      */
-    List<MonthlyTotalAmountDto> statMonthlyTotalAmount(@Param("username") String username, @Param("transType") int transType);
+    List<MonthlyTotalAmountDto> statMonthlyTotalAmount(@Param("username") String username, @Param("year") String year, @Param("transType") int transType);
 
     /**
      * 根据年份查询总收入、总支出、收支共项统计值

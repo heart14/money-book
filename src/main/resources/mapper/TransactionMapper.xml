@@ -18,6 +18,7 @@
                SUM(`amount`)  AS totalAmount
         FROM T_TRANSACTION
         WHERE `type` = #{transType}
+        AND  YEAR (`trans_time`) = #{year}
         AND `username` = #{username}
         GROUP BY month
         ORDER BY month

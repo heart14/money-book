@@ -36,9 +36,11 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<MonthlyIncome> getMonthlyIncome() {
+    public List<MonthlyIncome> getMonthlyIncome(String year) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<MonthlyTotalAmountDto> dtoList = transactionMapper.statMonthlyTotalAmount(name, Constants.TransType.INCOME);
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<MonthlyTotalAmountDto> dtoList = transactionMapper.statMonthlyTotalAmount(name,currentYear, Constants.TransType.INCOME);
         List<MonthlyIncome> monthlyIncomeList = new ArrayList<>();
         if (dtoList != null) {
             for (MonthlyTotalAmountDto dto : dtoList) {
@@ -54,6 +56,7 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<StatCard> getStatCardData(String year) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
         String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
         YearlyStatCardDto dto = transactionMapper.statCardData(name, currentYear);
 
