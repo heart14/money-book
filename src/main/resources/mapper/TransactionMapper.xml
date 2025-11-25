@@ -4,10 +4,12 @@
 <mapper namespace="com.liiwe.moneybook.mapper.TransactionMapper">
 
     <insert id="batchInsertTransaction" parameterType="java.util.List">
-        INSERT INTO t_transaction (`title`,`amount`,`type`,`cid`,`username`,`remark`,`trans_time`,`record_time`,`create_at`)
+        INSERT INTO t_transaction
+        (`title`,`amount`,`type`,`cid`,`username`,`remark`,`trans_time`,`record_time`,`create_at`)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.title}, #{item.amount}, #{item.type}, #{item.cid}, #{item.username}, #{item.remark}, #{item.transTime},
+            (#{item.title}, #{item.amount}, #{item.type}, #{item.cid}, #{item.username}, #{item.remark},
+            #{item.transTime},
             #{item.recordTime}, now())
         </foreach>
     </insert>
@@ -18,12 +20,12 @@
                SUM(`amount`)  AS totalAmount
         FROM T_TRANSACTION
         WHERE `type` = #{transType}
-        AND  YEAR (`trans_time`) = #{year}
-        AND `username` = #{username}
+          AND YEAR (`trans_time`) = #{year}
+          AND `username` = #{username}
         GROUP BY month
         ORDER BY month
     </select>
-    
+
     <select id="statCardData" resultType="com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto">
         SELECT SUM(CASE WHEN type = 1 THEN amount ELSE 0 END) AS totalIncome,
                SUM(CASE WHEN type = 2 THEN amount ELSE 0 END) AS totalExpense,
@@ -31,6 +33,16 @@
         FROM T_TRANSACTION
         WHERE YEAR (trans_time) = #{year}
           AND `username` = #{username}
+    </select>
+
+    <select id="statIncomeByCategory" resultType="com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto">
+        SELECT c.name                   AS categoryName,
+               IFNULL(SUM(t.amount), 0) AS totalIncome
+        FROM t_category c
+                 LEFT JOIN T_TRANSACTION t ON t.cid = c.id and YEAR (t.trans_time) = #{year} AND t.`username` = #{username}
+        WHERE c.type = 1
+          AND c.level = 2
+        GROUP BY c.id, c.name
     </select>
 
 </mapper>

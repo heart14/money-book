@@ -1,6 +1,7 @@
 package com.liiwe.moneybook.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
 import com.liiwe.moneybook.base.bean.dto.MonthlyTotalAmountDto;
 import com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto;
 import com.liiwe.moneybook.base.bean.entity.Transaction;
@@ -35,4 +36,13 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
      * @return YearlyStatCardDto
      */
     YearlyStatCardDto statCardData(@Param("username") String username, @Param("year") String year);
+
+    /**
+     * 根据年份、分类查询总收入值
+     *
+     * @param username 用户名
+     * @param year     年份
+     * @return CategoryIncomeDto
+     */
+    List<CategoryIncomeDto> statIncomeByCategory(@Param("username") String username, @Param("year") String year);
 }

@@ -15,4 +15,6 @@ public interface DashboardService {
     List<MonthlyIncome> getMonthlyIncome(String year);
 
     List<StatCard> getStatCardData(String year);
+
+    List<CategoryIncome> getCategoryIncome(String year);
 }

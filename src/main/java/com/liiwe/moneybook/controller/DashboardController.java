@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.controller;
 
+import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
@@ -36,5 +37,11 @@ public class DashboardController {
     public SysResponse fetchMonthlyIncome() {
         List<MonthlyIncome> monthlyIncome = dashboardService.getMonthlyIncome(null);
         return SysResponse.success(monthlyIncome);
+    }
+
+    @GetMapping("/categoryIncome")
+    public SysResponse fetchCategoryIncome() {
+        List<CategoryIncome> list = dashboardService.getCategoryIncome(null);
+        return SysResponse.success(list);
     }
 }

@@ -4,8 +4,10 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
 import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
+import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
 import com.liiwe.moneybook.base.bean.dto.MonthlyTotalAmountDto;
 import com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto;
 import com.liiwe.moneybook.base.common.Constants;
@@ -40,7 +42,7 @@ public class DashboardServiceImpl implements DashboardService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         // 默认查当年数据
         String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
-        List<MonthlyTotalAmountDto> dtoList = transactionMapper.statMonthlyTotalAmount(name,currentYear, Constants.TransType.INCOME);
+        List<MonthlyTotalAmountDto> dtoList = transactionMapper.statMonthlyTotalAmount(name, currentYear, Constants.TransType.INCOME);
         List<MonthlyIncome> monthlyIncomeList = new ArrayList<>();
         if (dtoList != null) {
             for (MonthlyTotalAmountDto dto : dtoList) {
@@ -78,7 +80,28 @@ public class DashboardServiceImpl implements DashboardService {
         return list;
     }
 
+    @Override
+    public List<CategoryIncome> getCategoryIncome(String year) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<CategoryIncomeDto> dto = transactionMapper.statIncomeByCategory(name, currentYear);
 
+        List<CategoryIncome> list = new ArrayList<>();
+        for (CategoryIncomeDto incomeDto : dto) {
+            CategoryIncome categoryIncome = new CategoryIncome(incomeDto.getCategoryName(), incomeDto.getTotalIncome());
+            list.add(categoryIncome);
+        }
+        return list;
+    }
+
+    /**
+     * 计算百分比
+     *
+     * @param current 当前值
+     * @param last    去年值
+     * @return 增长百分比
+     */
     private String percent(BigDecimal current, BigDecimal last) {
         BigDecimal subtract = current.subtract(last);
         BigDecimal divide = subtract.divide(last, 2, RoundingMode.HALF_UP);
