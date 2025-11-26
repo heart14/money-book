@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.base.common;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,5 +36,11 @@ public class Constants {
         public static final int BOTH = 3;
         public static final int EXPENSE = 2;
         public static final int INCOME = 1;
+    }
+
+    public static class DecimalNumber {
+        public static final BigDecimal ZERO = new BigDecimal("0");
+        public static final BigDecimal HUNDRED = new BigDecimal("100");
+        public static final BigDecimal THOUSAND = new BigDecimal("1000");
     }
 }
