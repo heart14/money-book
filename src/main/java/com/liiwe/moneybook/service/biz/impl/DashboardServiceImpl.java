@@ -5,10 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
-import com.liiwe.moneybook.base.bean.dto.CategoryExpenseDto;
-import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
-import com.liiwe.moneybook.base.bean.dto.MonthlyTotalAmountDto;
-import com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto;
+import com.liiwe.moneybook.base.bean.dto.*;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DashboardService;
@@ -127,6 +124,21 @@ public class DashboardServiceImpl implements DashboardService {
         return list;
     }
 
+    @Override
+    public List<LargeConsume> getLargeConsume(String year) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<LargeConsumeDto> dtoList = transactionMapper.selectLargeConsume(name, currentYear,Constants.DecimalNumber.THOUSAND);
+
+        List<LargeConsume> list = new ArrayList<>();
+        for (LargeConsumeDto dto : dtoList) {
+            LargeConsume largeConsume = new LargeConsume(DateUtil.format(dto.getTransTime(), "yyyy.MM.dd"), dto.getTitle(), "￥"+dto.getAmount());
+            list.add(largeConsume);
+        }
+        return list;
+    }
+
     /**
      * 计算百分比
      *
@@ -137,8 +149,8 @@ public class DashboardServiceImpl implements DashboardService {
     private String percent(BigDecimal current, BigDecimal last) {
         BigDecimal subtract = current.subtract(last);
         BigDecimal divide = subtract.divide(last, 2, RoundingMode.HALF_UP);
-        BigDecimal multiply = divide.multiply(new BigDecimal("100"));
-        int compare = multiply.compareTo(new BigDecimal("0"));
+        BigDecimal multiply = divide.multiply(Constants.DecimalNumber.HUNDRED);
+        int compare = multiply.compareTo(Constants.DecimalNumber.ZERO);
         if (compare >= 0) {
             return "+" + multiply + "%";
         } else {

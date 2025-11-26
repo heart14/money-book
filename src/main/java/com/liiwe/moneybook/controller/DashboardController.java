@@ -54,4 +54,9 @@ public class DashboardController {
         List<CategoryExpense> list = dashboardService.getCategoryExpense(null);
         return SysResponse.success(list);
     }
+    @GetMapping("/largeConsume")
+    public SysResponse fetchLargeConsume() {
+        List<LargeConsume> list = dashboardService.getLargeConsume(null);
+        return SysResponse.success(list);
+    }
 }

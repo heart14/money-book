@@ -58,4 +58,15 @@
         ORDER BY totalExpense DESC
     </select>
 
+    <select id="selectLargeConsume" resultType="com.liiwe.moneybook.base.bean.dto.LargeConsumeDto">
+        SELECT trans_time AS transTime,
+               title,
+               amount
+        FROM T_TRANSACTION t
+        WHERE t.`type` = 2
+            AND t.`amount` >= #{threshold}
+        AND YEAR (t.trans_time) = #{year}
+        AND t.`username` = #{username}
+        ORDER BY transTime DESC
+    </select>
 </mapper>

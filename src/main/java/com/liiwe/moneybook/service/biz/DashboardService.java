@@ -19,4 +19,6 @@ public interface DashboardService {
     List<CategoryIncome> getCategoryIncome(String year);
 
     List<CategoryExpense> getCategoryExpense(String year);
+
+    List<LargeConsume> getLargeConsume(String year);
 }

@@ -1,14 +1,12 @@
 package com.liiwe.moneybook.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.liiwe.moneybook.base.bean.dto.CategoryExpenseDto;
-import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
-import com.liiwe.moneybook.base.bean.dto.MonthlyTotalAmountDto;
-import com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto;
+import com.liiwe.moneybook.base.bean.dto.*;
 import com.liiwe.moneybook.base.bean.entity.Transaction;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -56,4 +54,13 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
      * @return CategoryExpenseDto
      */
     List<CategoryExpenseDto> statExpenseByCategory(@Param("username") String username, @Param("year") String year);
+
+    /**
+     * 根据年份查询大额消费（>=1000）
+     *
+     * @param username 用户名
+     * @param year     年份
+     * @return LargeConsumeDto
+     */
+    List<LargeConsumeDto> selectLargeConsume(@Param("username") String username, @Param("year") String year, @Param("threshold") BigDecimal threshold);
 }
