@@ -4,10 +4,8 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyExpense;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
+import com.liiwe.moneybook.base.bean.domain.dashboard.*;
+import com.liiwe.moneybook.base.bean.dto.CategoryExpenseDto;
 import com.liiwe.moneybook.base.bean.dto.CategoryIncomeDto;
 import com.liiwe.moneybook.base.bean.dto.MonthlyTotalAmountDto;
 import com.liiwe.moneybook.base.bean.dto.YearlyStatCardDto;
@@ -104,12 +102,27 @@ public class DashboardServiceImpl implements DashboardService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         // 默认查当年数据
         String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
-        List<CategoryIncomeDto> dto = transactionMapper.statIncomeByCategory(name, currentYear);
+        List<CategoryIncomeDto> dtoList = transactionMapper.statIncomeByCategory(name, currentYear);
 
         List<CategoryIncome> list = new ArrayList<>();
-        for (CategoryIncomeDto incomeDto : dto) {
-            CategoryIncome categoryIncome = new CategoryIncome(incomeDto.getCategoryName(), incomeDto.getTotalIncome());
+        for (CategoryIncomeDto dto : dtoList) {
+            CategoryIncome categoryIncome = new CategoryIncome(dto.getCategoryName(), dto.getTotalIncome());
             list.add(categoryIncome);
+        }
+        return list;
+    }
+
+    @Override
+    public List<CategoryExpense> getCategoryExpense(String year) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<CategoryExpenseDto> dtoList = transactionMapper.statExpenseByCategory(name, currentYear);
+
+        List<CategoryExpense> list = new ArrayList<>();
+        for (CategoryExpenseDto dto : dtoList) {
+            CategoryExpense categoryExpense = new CategoryExpense(dto.getCategoryName(), dto.getTotalExpense(),dto.getCount());
+            list.add(categoryExpense);
         }
         return list;
     }

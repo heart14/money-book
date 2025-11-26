@@ -45,4 +45,17 @@
         GROUP BY c.id, c.name
     </select>
 
+    <select id="statExpenseByCategory" resultType="com.liiwe.moneybook.base.bean.dto.CategoryExpenseDto">
+        SELECT IFNULL(c.path,"undefined")        AS categoryName,
+               IFNULL(SUM(t.amount), 0) AS totalExpense,
+               COUNT(t.id) AS count
+        FROM T_TRANSACTION t
+                 LEFT  JOIN t_category c ON c.id = t.cid
+        WHERE t.type = 2
+            AND YEAR (t.trans_time) = #{year}
+            AND t.`username` = #{username}
+        GROUP BY c.id, c.name
+        ORDER BY totalExpense DESC
+    </select>
+
 </mapper>

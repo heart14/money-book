@@ -1,9 +1,6 @@
 package com.liiwe.moneybook.service.biz;
 
-import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyExpense;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
+import com.liiwe.moneybook.base.bean.domain.dashboard.*;
 
 import java.util.List;
 
@@ -20,4 +17,6 @@ public interface DashboardService {
     List<StatCard> getStatCardData(String year);
 
     List<CategoryIncome> getCategoryIncome(String year);
+
+    List<CategoryExpense> getCategoryExpense(String year);
 }

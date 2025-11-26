@@ -1,9 +1,6 @@
 package com.liiwe.moneybook.controller;
 
-import com.liiwe.moneybook.base.bean.domain.dashboard.CategoryIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyExpense;
-import com.liiwe.moneybook.base.bean.domain.dashboard.MonthlyIncome;
-import com.liiwe.moneybook.base.bean.domain.dashboard.StatCard;
+import com.liiwe.moneybook.base.bean.domain.dashboard.*;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +46,12 @@ public class DashboardController {
     @GetMapping("/categoryIncome")
     public SysResponse fetchCategoryIncome() {
         List<CategoryIncome> list = dashboardService.getCategoryIncome(null);
+        return SysResponse.success(list);
+    }
+
+    @GetMapping("/categoryExpense")
+    public SysResponse fetchCategoryExpense() {
+        List<CategoryExpense> list = dashboardService.getCategoryExpense(null);
         return SysResponse.success(list);
     }
 }
