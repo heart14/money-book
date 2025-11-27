@@ -1,6 +1,8 @@
 package com.liiwe.moneybook.service.biz;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
+import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 
 import java.util.List;
 
@@ -21,4 +23,6 @@ public interface DashboardService {
     List<CategoryExpense> getCategoryExpense(String year);
 
     List<LargeConsume> getLargeConsume(String year);
+
+    Page<TransDetail> getTransDetailPageList(PageListReq req);
 }

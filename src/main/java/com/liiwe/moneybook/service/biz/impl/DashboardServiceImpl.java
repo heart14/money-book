@@ -4,9 +4,15 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
+import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 import com.liiwe.moneybook.base.bean.dto.*;
+import com.liiwe.moneybook.base.bean.entity.Category;
+import com.liiwe.moneybook.base.bean.entity.Transaction;
 import com.liiwe.moneybook.base.common.Constants;
+import com.liiwe.moneybook.mapper.CategoryMapper;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +24,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author lwf14
@@ -29,8 +37,11 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final TransactionMapper transactionMapper;
 
-    public DashboardServiceImpl(TransactionMapper transactionMapper) {
+    private final CategoryMapper categoryMapper;
+
+    public DashboardServiceImpl(TransactionMapper transactionMapper, CategoryMapper categoryMapper) {
         this.transactionMapper = transactionMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -118,7 +129,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         List<CategoryExpense> list = new ArrayList<>();
         for (CategoryExpenseDto dto : dtoList) {
-            CategoryExpense categoryExpense = new CategoryExpense(dto.getCategoryName(), dto.getTotalExpense(),dto.getCount());
+            CategoryExpense categoryExpense = new CategoryExpense(dto.getCategoryName(), dto.getTotalExpense(), dto.getCount());
             list.add(categoryExpense);
         }
         return list;
@@ -129,14 +140,92 @@ public class DashboardServiceImpl implements DashboardService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         // 默认查当年数据
         String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
-        List<LargeConsumeDto> dtoList = transactionMapper.selectLargeConsume(name, currentYear,Constants.DecimalNumber.THOUSAND);
+        List<LargeConsumeDto> dtoList = transactionMapper.selectLargeConsume(name, currentYear, Constants.DecimalNumber.THOUSAND);
 
         List<LargeConsume> list = new ArrayList<>();
         for (LargeConsumeDto dto : dtoList) {
-            LargeConsume largeConsume = new LargeConsume(DateUtil.format(dto.getTransTime(), "yyyy.MM.dd"), dto.getTitle(), "￥"+dto.getAmount());
+            LargeConsume largeConsume = new LargeConsume(DateUtil.format(dto.getTransTime(), "yyyy.MM.dd"), dto.getTitle(), "￥" + dto.getAmount());
             list.add(largeConsume);
         }
         return list;
+    }
+
+    @Override
+    public Page<TransDetail> getTransDetailPageList(PageListReq req) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Page<Transaction> page = new Page<>(req.getCurrent(), req.getSize());
+        LambdaQueryWrapper<Transaction> wrapper = new LambdaQueryWrapper<>();
+
+        if (req.getCid() != null && req.getCid() != -1) {
+            wrapper.eq(Transaction::getCid, req.getCid());
+        }
+
+        // mybatis-plus gt:大于, lt:小于, ge:大于等于, le:小于等于
+        if (StrUtil.isNotBlank(req.getDateRangeStart())) {
+            wrapper.ge(Transaction::getTransTime, DateUtil.parse(req.getDateRangeStart() + " 00:00:00"));
+        }
+        if (StrUtil.isNotBlank(req.getDateRangeEnd())) {
+            wrapper.le(Transaction::getTransTime, DateUtil.parse(req.getDateRangeEnd() + " 23:59:59"));
+        }
+
+        if (StrUtil.isNotBlank(req.getTitle())) {
+            wrapper.like(Transaction::getTitle, req.getTitle());
+        }
+        if (StrUtil.isNotBlank(req.getType())) {
+            wrapper.eq(Transaction::getType, req.getType());
+        }
+        if (StrUtil.isNotBlank(req.getRemark())) {
+            wrapper.like(Transaction::getRemark, req.getRemark());
+        }
+
+        wrapper.eq(Transaction::getUsername, name);
+        wrapper.orderByDesc(Transaction::getTransTime);
+
+        Page<Transaction> selectPage = transactionMapper.selectPage(page, wrapper);
+
+        List<Transaction> records = selectPage.getRecords();
+
+        // 查询所有分类信息
+        LambdaQueryWrapper<Category> categoryQueryWrapper = new LambdaQueryWrapper<>();
+        categoryQueryWrapper.eq(Category::getLevel, 2);
+        categoryQueryWrapper.eq(Category::getIsDeleted, 0);
+
+        List<Category> categoryList = categoryMapper.selectList(categoryQueryWrapper);
+        Map<Long, String> nameMap = categoryList.stream().collect(Collectors.toMap(Category::getId, Category::getName));
+        Map<Long, String> pathMap = categoryList.stream().collect(Collectors.toMap(Category::getId, Category::getPath));
+
+        List<TransDetail> list = new ArrayList<>();
+        for (Transaction record : records) {
+            TransDetail detail = new TransDetail();
+            detail.setId(record.getId());
+            detail.setTitle(record.getTitle());
+            detail.setAmount(record.getAmount());
+            detail.setType(record.getType());
+            detail.setCid(record.getCid());
+            detail.setCategoryName(nameMap.get(record.getCid()));
+            detail.setCategoryPath(pathMap.get(record.getCid()));
+            detail.setUsername(record.getUsername());
+            detail.setRemark(record.getRemark());
+            detail.setTransTime(record.getTransTime());
+            detail.setRecordTime(record.getRecordTime());
+
+            list.add(detail);
+        }
+
+        Page<TransDetail> detailPage = new Page<>();
+        detailPage.setRecords(list);
+        detailPage.setTotal(selectPage.getTotal());
+        detailPage.setSize(selectPage.getSize());
+        detailPage.setCurrent(selectPage.getCurrent());
+//        detailPage.setOrders(selectPage.getOr);
+//        detailPage.setOptimizeCountSql(selectPage.getO)
+//        detailPage.setSearchCount(selectPage.getSe)
+//        detailPage.setOptimizeJoinOfCountSql(selectPage.getOp);
+//        detailPage.setMaxLimit(selectPage.getM());
+//        detailPage.setCountId(selectPage.get);
+        return detailPage;
     }
 
     /**

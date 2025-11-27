@@ -1,6 +1,8 @@
 package com.liiwe.moneybook.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
+import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,9 +56,16 @@ public class DashboardController {
         List<CategoryExpense> list = dashboardService.getCategoryExpense(null);
         return SysResponse.success(list);
     }
+
     @GetMapping("/largeConsume")
     public SysResponse fetchLargeConsume() {
         List<LargeConsume> list = dashboardService.getLargeConsume(null);
         return SysResponse.success(list);
+    }
+
+    @GetMapping("/transDetailList")
+    public SysResponse fetchTransDetailList(PageListReq req) {
+        Page<TransDetail> pageList = dashboardService.getTransDetailPageList(req);
+        return SysResponse.success(pageList);
     }
 }

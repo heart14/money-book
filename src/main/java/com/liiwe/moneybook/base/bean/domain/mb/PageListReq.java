@@ -17,8 +17,6 @@ public class PageListReq {
 
     private int size;
 
-    private String date;
-
     private String dateRangeStart;
 
     private String dateRangeEnd;
@@ -27,7 +25,7 @@ public class PageListReq {
 
     private String type;
 
-    private Integer categoryId;
+    private Long cid;
 
-    private String path;
+    private String remark;
 }
