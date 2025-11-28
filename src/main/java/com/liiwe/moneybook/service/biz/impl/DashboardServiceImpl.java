@@ -228,6 +228,35 @@ public class DashboardServiceImpl implements DashboardService {
         return detailPage;
     }
 
+    @Override
+    public void saveOrEditTransDetail(TransDetail detail) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (detail.getId() == null) {
+            // 新增
+            Transaction transaction = new Transaction();
+            transaction.setTitle(detail.getTitle());
+            transaction.setAmount(detail.getAmount());
+            transaction.setType(detail.getType());
+            transaction.setCid(detail.getCid());
+            transaction.setUsername(name);
+            transaction.setRemark(detail.getRemark());
+            transaction.setTransTime(detail.getTransTime());
+            transaction.setRecordTime(detail.getRecordTime());
+            transaction.setCreateAt(new Date());
+            transactionMapper.insert(transaction);
+            return;
+        }
+        Transaction selected = transactionMapper.selectById(detail.getId());
+        selected.setTitle(detail.getTitle());
+        selected.setType(detail.getType());
+        selected.setCid(detail.getCid());
+        selected.setRemark(detail.getRemark());
+        selected.setTransTime(detail.getTransTime());
+        selected.setRecordTime(detail.getRecordTime());
+        selected.setUpdateAt(new Date());
+        transactionMapper.updateById(selected);
+    }
+
     /**
      * 计算百分比
      *

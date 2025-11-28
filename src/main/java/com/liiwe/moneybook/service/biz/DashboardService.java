@@ -25,4 +25,6 @@ public interface DashboardService {
     List<LargeConsume> getLargeConsume(String year);
 
     Page<TransDetail> getTransDetailPageList(PageListReq req);
+
+    void saveOrEditTransDetail(TransDetail detail);
 }

@@ -6,9 +6,7 @@ import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -67,5 +65,12 @@ public class DashboardController {
     public SysResponse fetchTransDetailList(PageListReq req) {
         Page<TransDetail> pageList = dashboardService.getTransDetailPageList(req);
         return SysResponse.success(pageList);
+    }
+
+    @PostMapping("/transDetail")
+    public SysResponse postTransDetail(@RequestBody TransDetail trans) {
+        log.info("post trans: {}", trans);
+        dashboardService.saveOrEditTransDetail(trans);
+        return SysResponse.success();
     }
 }
