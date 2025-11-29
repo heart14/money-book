@@ -3,6 +3,7 @@ package com.liiwe.moneybook.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
 import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
+import com.liiwe.moneybook.base.bean.dto.TabulateDto;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +73,11 @@ public class DashboardController {
         log.info("post trans: {}", trans);
         dashboardService.saveOrEditTransDetail(trans);
         return SysResponse.success();
+    }
+
+    @GetMapping("/tabulateList")
+    public SysResponse fetchTabulate(){
+        List<TabulateDto> list = dashboardService.getTabulateList(null);
+        return SysResponse.success(list);
     }
 }

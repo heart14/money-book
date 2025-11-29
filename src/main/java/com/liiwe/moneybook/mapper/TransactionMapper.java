@@ -63,4 +63,13 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
      * @return LargeConsumeDto
      */
     List<LargeConsumeDto> selectLargeConsume(@Param("username") String username, @Param("year") String year, @Param("threshold") BigDecimal threshold);
+
+    /**
+     * 根据年份查询按月按分类统计数据
+     *
+     * @param username 用户名
+     * @param year 年份
+     * @return TabulateDto
+     */
+    List<TabulateDto> statTabulateData(@Param("username") String username, @Param("year") String year);
 }

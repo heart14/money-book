@@ -257,6 +257,16 @@ public class DashboardServiceImpl implements DashboardService {
         transactionMapper.updateById(selected);
     }
 
+    @Override
+    public List<TabulateDto> getTabulateList(String year) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 默认查当年数据
+        String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
+        List<TabulateDto> dtoList = transactionMapper.statTabulateData(name, currentYear);
+        log.info("tabulate result: {}", dtoList);
+        return dtoList;
+    }
+
     /**
      * 计算百分比
      *

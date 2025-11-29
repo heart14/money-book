@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({org.springframework.web.HttpRequestMethodNotSupportedException.class})
     public SysResponse restfulHandler(org.springframework.web.HttpRequestMethodNotSupportedException e1) {
+        log.error("请求方式错误");
         return SysResponse.fail(e1.getMessage());
     }
 
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public SysResponse handleValidationExceptions(MethodArgumentNotValidException e2) {
+        log.error("参数校验失败");
         Map<String, String> errors = new HashMap<>();
         e2.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
@@ -35,6 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public SysResponse exceptionHandler(Exception e) {
+        log.error("系统异常：{}", e.getMessage(), e);
         return SysResponse.fail(e.getMessage());
     }
 }
