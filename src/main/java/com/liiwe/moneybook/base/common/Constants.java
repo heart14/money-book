@@ -38,6 +38,16 @@ public class Constants {
         public static final int INCOME = 1;
     }
 
+    public static class CategoryLevel {
+        public static final int LEVEL_1 = 1;
+        public static final int LEVEL_2 = 2;
+    }
+
+    public static class IsDeleted {
+        public static final int FALSE = 0;
+        public static final int TRUE = 1;
+    }
+
     public static class DecimalNumber {
         public static final BigDecimal ZERO = new BigDecimal("0");
         public static final BigDecimal HUNDRED = new BigDecimal("100");

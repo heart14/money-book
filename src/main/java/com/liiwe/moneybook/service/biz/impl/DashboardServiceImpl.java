@@ -158,7 +158,7 @@ public class DashboardServiceImpl implements DashboardService {
         Page<Transaction> page = new Page<>(req.getCurrent(), req.getSize());
         LambdaQueryWrapper<Transaction> wrapper = new LambdaQueryWrapper<>();
 
-        if (req.getCid() != null && req.getCid() != -1) {
+        if (req.getCid() != null) {
             wrapper.eq(Transaction::getCid, req.getCid());
         }
 
@@ -189,8 +189,8 @@ public class DashboardServiceImpl implements DashboardService {
 
         // 查询所有分类信息
         LambdaQueryWrapper<Category> categoryQueryWrapper = new LambdaQueryWrapper<>();
-        categoryQueryWrapper.eq(Category::getLevel, 2);
-        categoryQueryWrapper.eq(Category::getIsDeleted, 0);
+        categoryQueryWrapper.eq(Category::getLevel, Constants.CategoryLevel.LEVEL_2);
+        categoryQueryWrapper.eq(Category::getIsDeleted, Constants.IsDeleted.FALSE);
 
         List<Category> categoryList = categoryMapper.selectList(categoryQueryWrapper);
         Map<Long, String> nameMap = categoryList.stream().collect(Collectors.toMap(Category::getId, Category::getName));
