@@ -275,6 +275,12 @@ public class DashboardServiceImpl implements DashboardService {
      * @return 增长百分比
      */
     private String percent(BigDecimal current, BigDecimal last) {
+        if (current.compareTo(Constants.DecimalNumber.ZERO) == 0) {
+            return "+0%";
+        }
+        if (last.compareTo(Constants.DecimalNumber.ZERO) == 0) {
+            return "+100%";
+        }
         BigDecimal subtract = current.subtract(last);
         BigDecimal divide = subtract.divide(last, 2, RoundingMode.HALF_UP);
         BigDecimal multiply = divide.multiply(Constants.DecimalNumber.HUNDRED);
@@ -282,7 +288,7 @@ public class DashboardServiceImpl implements DashboardService {
         if (compare >= 0) {
             return "+" + multiply + "%";
         } else {
-            return "-" + multiply + "%";
+            return multiply + "%";
         }
     }
 }
