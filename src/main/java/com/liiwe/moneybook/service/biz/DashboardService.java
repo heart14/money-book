@@ -30,4 +30,8 @@ public interface DashboardService {
     void saveOrEditTransDetail(TransDetail detail);
 
     List<TabulateDto> getTabulateList(String year);
+
+    List<CalendarEvent> getCalendarEventList(String yearMonth);
+
+    void saveTag(String date, String content);
 }

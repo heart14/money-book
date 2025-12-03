@@ -80,4 +80,16 @@ public class DashboardController {
         List<TabulateDto> list = dashboardService.getTabulateList(null);
         return SysResponse.success(list);
     }
+
+    @GetMapping("/eventList")
+    public SysResponse fetchEventList(String yearMonth){
+        List<CalendarEvent> list = dashboardService.getCalendarEventList(yearMonth);
+        return SysResponse.success(list);
+    }
+
+    @PostMapping("/tag")
+    public SysResponse postTag(String date,String content){
+        dashboardService.saveTag(date, content);
+        return SysResponse.success();
+    }
 }

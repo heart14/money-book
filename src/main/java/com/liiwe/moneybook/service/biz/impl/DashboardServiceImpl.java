@@ -10,9 +10,11 @@ import com.liiwe.moneybook.base.bean.domain.dashboard.*;
 import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 import com.liiwe.moneybook.base.bean.dto.*;
 import com.liiwe.moneybook.base.bean.entity.Category;
+import com.liiwe.moneybook.base.bean.entity.EventTag;
 import com.liiwe.moneybook.base.bean.entity.Transaction;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.CategoryMapper;
+import com.liiwe.moneybook.mapper.EventTagMapper;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +41,12 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final CategoryMapper categoryMapper;
 
-    public DashboardServiceImpl(TransactionMapper transactionMapper, CategoryMapper categoryMapper) {
+    private final EventTagMapper eventTagMapper;
+
+    public DashboardServiceImpl(TransactionMapper transactionMapper, CategoryMapper categoryMapper, EventTagMapper eventTagMapper) {
         this.transactionMapper = transactionMapper;
         this.categoryMapper = categoryMapper;
+        this.eventTagMapper = eventTagMapper;
     }
 
     @Override
@@ -268,6 +273,40 @@ public class DashboardServiceImpl implements DashboardService {
         List<TabulateDto> dtoList = transactionMapper.statTabulateData(name, currentYear);
         log.info("tabulate result: {}", dtoList);
         return dtoList;
+    }
+
+    @Override
+    public List<CalendarEvent> getCalendarEventList(String yearMonth) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        LambdaQueryWrapper<EventTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(EventTag::getUsername, name);
+        // 按月，模糊查询当月数据
+        wrapper.like(EventTag::getDate, yearMonth);
+        List<EventTag> list = eventTagMapper.selectList(wrapper);
+        List<CalendarEvent> eventList = new ArrayList<>();
+        for (EventTag eventTag : list) {
+            CalendarEvent event = new CalendarEvent(eventTag);
+            eventList.add(event);
+        }
+        return eventList;
+    }
+
+    @Override
+    public void saveTag(String date, String content) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 格式化日期为yyyy-MM-dd
+        DateTime parse = DateUtil.parse(date);
+        String format = DateUtil.format(parse, "yyyy-MM-dd");
+
+        EventTag eventTag = new EventTag();
+        eventTag.setDate(format);
+        eventTag.setContent(content);
+        eventTag.setUsername(name);
+        eventTag.setCreateAt(new Date());
+        eventTagMapper.insert(eventTag);
     }
 
     /**
