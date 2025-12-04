@@ -14,6 +14,10 @@ public class CalendarEvent {
      * 日期
      */
     private String date;
+    /**
+     * 结束日期
+     */
+    private String endDate;
 
     /**
      * tag事件
@@ -27,6 +31,7 @@ public class CalendarEvent {
 
     public CalendarEvent(EventTag eventTag) {
         this.date = eventTag.getDate();
+        this.endDate = eventTag.getEndDate();
         this.content = eventTag.getContent();
         this.type = "info";
     }

@@ -28,6 +28,10 @@ public class EventTag extends BaseEntity {
      * 日期，格式yyyy-MM-dd
      */
     private String date;
+    /**
+     * 跨日期事件结束日期，格式yyyy-MM-dd
+     */
+    private String endDate;
 
     /**
      * tag内容
