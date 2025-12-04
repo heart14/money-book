@@ -344,6 +344,20 @@ public class DashboardServiceImpl implements DashboardService {
         return diaryList;
     }
 
+    @Override
+    public void deleteEventTag(Long id) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        LambdaQueryWrapper<EventTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(EventTag::getUsername, name);
+        wrapper.eq(EventTag::getId, id);
+        EventTag selected = eventTagMapper.selectOne(wrapper);
+        if (selected == null) {
+            throw new RuntimeException("删除失败，事件不存在");
+        }
+        eventTagMapper.deleteById(id);
+    }
+
     /**
      * 计算百分比
      *
@@ -369,6 +383,11 @@ public class DashboardServiceImpl implements DashboardService {
         }
     }
 
+    /**
+     * 格式化日期为yyyy-MM-dd
+     * @param date 原始日期
+     * @return yyyy-MM-dd
+     */
     private String formatEventDate(String date){
         if (StrUtil.isEmpty(date)) {
             return null;

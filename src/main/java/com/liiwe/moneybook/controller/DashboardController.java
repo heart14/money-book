@@ -98,4 +98,9 @@ public class DashboardController {
         dashboardService.saveOrEditEventTag(event);
         return SysResponse.success();
     }
+    @DeleteMapping("/event")
+    public SysResponse deleteEventTag(Long id){
+        dashboardService.deleteEventTag(id);
+        return SysResponse.success();
+    }
 }

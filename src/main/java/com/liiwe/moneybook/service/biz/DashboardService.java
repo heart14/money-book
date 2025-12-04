@@ -36,4 +36,6 @@ public interface DashboardService {
     List<CalendarDiary> getCalendarDiaryList(String yearMonth);
 
     void saveOrEditEventTag(CalendarEvent event);
+
+    void deleteEventTag(Long id);
 }
