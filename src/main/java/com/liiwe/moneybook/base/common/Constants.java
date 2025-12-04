@@ -32,6 +32,18 @@ public class Constants {
         }
     };
 
+    /**
+     * 映射班次
+     */
+    public static final HashMap<String, String> workShiftMapping = new HashMap<>() {
+        {
+            put("休息", "REST");
+            put("早班", "EARLY");
+            put("白班", "DAY");
+            put("晚班", "NIGHT");
+        }
+    };
+
     public static class TransType {
         public static final int BOTH = 3;
         public static final int EXPENSE = 2;
