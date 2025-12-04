@@ -10,10 +10,12 @@ import com.liiwe.moneybook.base.bean.domain.dashboard.*;
 import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
 import com.liiwe.moneybook.base.bean.dto.*;
 import com.liiwe.moneybook.base.bean.entity.Category;
+import com.liiwe.moneybook.base.bean.entity.Diary;
 import com.liiwe.moneybook.base.bean.entity.EventTag;
 import com.liiwe.moneybook.base.bean.entity.Transaction;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.CategoryMapper;
+import com.liiwe.moneybook.mapper.DiaryMapper;
 import com.liiwe.moneybook.mapper.EventTagMapper;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DashboardService;
@@ -43,10 +45,13 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final EventTagMapper eventTagMapper;
 
-    public DashboardServiceImpl(TransactionMapper transactionMapper, CategoryMapper categoryMapper, EventTagMapper eventTagMapper) {
+    private final DiaryMapper diaryMapper;
+
+    public DashboardServiceImpl(TransactionMapper transactionMapper, CategoryMapper categoryMapper, EventTagMapper eventTagMapper, DiaryMapper diaryMapper) {
         this.transactionMapper = transactionMapper;
         this.categoryMapper = categoryMapper;
         this.eventTagMapper = eventTagMapper;
+        this.diaryMapper = diaryMapper;
     }
 
     @Override
@@ -307,6 +312,26 @@ public class DashboardServiceImpl implements DashboardService {
         eventTag.setUsername(name);
         eventTag.setCreateAt(new Date());
         eventTagMapper.insert(eventTag);
+    }
+
+    @Override
+    public List<CalendarDiary> getCalendarDiaryList(String yearMonth) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        LambdaQueryWrapper<Diary> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Diary::getUsername, name);
+        // 按月，模糊查询当月数据
+        wrapper.like(Diary::getDate, yearMonth);
+        List<Diary> list = diaryMapper.selectList(wrapper);
+        List<CalendarDiary> diaryList = new ArrayList<>();
+        for (Diary diary : list) {
+            CalendarDiary item = new CalendarDiary();
+            item.setDate(diary.getDate());
+            item.setDiaryContent(diary.getContent());
+            item.setWorkShift(diary.getWorkShift());
+            diaryList.add(item);
+        }
+        return diaryList;
     }
 
     /**

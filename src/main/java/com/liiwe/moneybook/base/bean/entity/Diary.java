@@ -33,6 +33,11 @@ public class Diary extends BaseEntity {
     private String content;
 
     /**
+     * 班次
+     */
+    private String workShift;
+
+    /**
      * 用户
      */
     private String username;

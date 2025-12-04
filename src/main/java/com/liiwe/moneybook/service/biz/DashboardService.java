@@ -33,5 +33,7 @@ public interface DashboardService {
 
     List<CalendarEvent> getCalendarEventList(String yearMonth);
 
+    List<CalendarDiary> getCalendarDiaryList(String yearMonth);
+
     void saveTag(String date, String content);
 }

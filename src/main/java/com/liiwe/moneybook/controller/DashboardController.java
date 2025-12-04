@@ -87,6 +87,12 @@ public class DashboardController {
         return SysResponse.success(list);
     }
 
+    @GetMapping("/diaryList")
+    public SysResponse fetchDiaryList(String yearMonth){
+        List<CalendarDiary> list = dashboardService.getCalendarDiaryList(yearMonth);
+        return SysResponse.success(list);
+    }
+
     @PostMapping("/tag")
     public SysResponse postTag(String date,String content){
         dashboardService.saveTag(date, content);
