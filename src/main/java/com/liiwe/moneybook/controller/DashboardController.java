@@ -93,9 +93,9 @@ public class DashboardController {
         return SysResponse.success(list);
     }
 
-    @PostMapping("/tag")
-    public SysResponse postTag(String date,String content){
-        dashboardService.saveTag(date, content);
+    @PostMapping("/event")
+    public SysResponse postEventTag(@RequestBody CalendarEvent event){
+        dashboardService.saveOrEditEventTag(event);
         return SysResponse.success();
     }
 }

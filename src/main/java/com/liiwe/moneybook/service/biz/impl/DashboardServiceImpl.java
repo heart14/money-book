@@ -298,20 +298,30 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void saveTag(String date, String content) {
+    public void saveOrEditEventTag(CalendarEvent event) {
         // 获取当前登录用户的用户名
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // 格式化日期为yyyy-MM-dd
-        DateTime parse = DateUtil.parse(date);
-        String format = DateUtil.format(parse, "yyyy-MM-dd");
+        LambdaQueryWrapper<EventTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(EventTag::getUsername, name);
+        wrapper.eq(EventTag::getId, event.getId());
+        EventTag selected = eventTagMapper.selectOne(wrapper);
 
-        EventTag eventTag = new EventTag();
-        eventTag.setDate(format);
-        eventTag.setContent(content);
-        eventTag.setUsername(name);
-        eventTag.setCreateAt(new Date());
-        eventTagMapper.insert(eventTag);
+        if (selected == null) {
+            EventTag eventTag = new EventTag();
+            eventTag.setDate(formatEventDate(event.getDate()));
+            eventTag.setEndDate(formatEventDate(event.getEndDate()));
+            eventTag.setContent(event.getContent());
+            eventTag.setUsername(name);
+            eventTag.setCreateAt(new Date());
+            eventTagMapper.insert(eventTag);
+            return;
+        }
+        selected.setDate(formatEventDate(event.getDate()));
+        selected.setEndDate(formatEventDate(event.getEndDate()));
+        selected.setContent(event.getContent());
+        selected.setUpdateAt(new Date());
+        eventTagMapper.updateById(selected);
     }
 
     @Override
@@ -357,5 +367,14 @@ public class DashboardServiceImpl implements DashboardService {
         } else {
             return multiply + "%";
         }
+    }
+
+    private String formatEventDate(String date){
+        if (StrUtil.isEmpty(date)) {
+            return null;
+        }
+        // 格式化日期为yyyy-MM-dd
+        DateTime parse = DateUtil.parse(date);
+        return DateUtil.format(parse, "yyyy-MM-dd");
     }
 }
