@@ -24,15 +24,9 @@ public class CalendarEvent {
      */
     private String content;
 
-    /**
-     * 页面展示效果类型（暂时用不到）
-     */
-    private String type;
-
     public CalendarEvent(EventTag eventTag) {
         this.date = eventTag.getDate();
         this.endDate = eventTag.getEndDate();
         this.content = eventTag.getContent();
-        this.type = "info";
     }
 }
