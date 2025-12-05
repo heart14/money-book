@@ -309,16 +309,16 @@ public class DashboardServiceImpl implements DashboardService {
 
         if (selected == null) {
             EventTag eventTag = new EventTag();
-            eventTag.setDate(formatEventDate(event.getDate()));
-            eventTag.setEndDate(formatEventDate(event.getEndDate()));
+            eventTag.setDate(formatDate(event.getDate()));
+            eventTag.setEndDate(formatDate(event.getEndDate()));
             eventTag.setContent(event.getContent());
             eventTag.setUsername(name);
             eventTag.setCreateAt(new Date());
             eventTagMapper.insert(eventTag);
             return;
         }
-        selected.setDate(formatEventDate(event.getDate()));
-        selected.setEndDate(formatEventDate(event.getEndDate()));
+        selected.setDate(formatDate(event.getDate()));
+        selected.setEndDate(formatDate(event.getEndDate()));
         selected.setContent(event.getContent());
         selected.setUpdateAt(new Date());
         eventTagMapper.updateById(selected);
@@ -336,6 +336,7 @@ public class DashboardServiceImpl implements DashboardService {
         List<CalendarDiary> diaryList = new ArrayList<>();
         for (Diary diary : list) {
             CalendarDiary item = new CalendarDiary();
+            item.setId(diary.getId());
             item.setDate(diary.getDate());
             item.setDiaryContent(diary.getContent());
             item.setWorkShift(diary.getWorkShift());
@@ -356,6 +357,33 @@ public class DashboardServiceImpl implements DashboardService {
             throw new RuntimeException("删除失败，事件不存在");
         }
         eventTagMapper.deleteById(id);
+    }
+
+    @Override
+    public void saveOrEditDiary(CalendarDiary diary) {
+        // 获取当前登录用户的用户名
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        LambdaQueryWrapper<Diary> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Diary::getUsername, name);
+        wrapper.eq(Diary::getId, diary.getId());
+        Diary selected = diaryMapper.selectOne(wrapper);
+
+        if (selected == null) {
+            Diary item = new Diary();
+            item.setDate(formatDate(diary.getDate()));
+            item.setContent(diary.getDiaryContent());
+            item.setWorkShift(diary.getWorkShift());
+            item.setUsername(name);
+            item.setCreateAt(new Date());
+            diaryMapper.insert(item);
+            return;
+        }
+        selected.setDate(formatDate(diary.getDate()));
+        selected.setWorkShift(diary.getWorkShift());
+        selected.setContent(diary.getDiaryContent());
+        selected.setUpdateAt(new Date());
+        diaryMapper.updateById(selected);
     }
 
     /**
@@ -385,10 +413,11 @@ public class DashboardServiceImpl implements DashboardService {
 
     /**
      * 格式化日期为yyyy-MM-dd
+     *
      * @param date 原始日期
      * @return yyyy-MM-dd
      */
-    private String formatEventDate(String date){
+    private String formatDate(String date) {
         if (StrUtil.isEmpty(date)) {
             return null;
         }

@@ -76,31 +76,39 @@ public class DashboardController {
     }
 
     @GetMapping("/tabulateList")
-    public SysResponse fetchTabulate(){
+    public SysResponse fetchTabulate() {
         List<TabulateDto> list = dashboardService.getTabulateList(null);
         return SysResponse.success(list);
     }
 
     @GetMapping("/eventList")
-    public SysResponse fetchEventList(String yearMonth){
+    public SysResponse fetchEventList(String yearMonth) {
         List<CalendarEvent> list = dashboardService.getCalendarEventList(yearMonth);
         return SysResponse.success(list);
     }
 
+    @PostMapping("/event")
+    public SysResponse postEventTag(@RequestBody CalendarEvent event) {
+        dashboardService.saveOrEditEventTag(event);
+        return SysResponse.success();
+    }
+
+    @DeleteMapping("/event")
+    public SysResponse deleteEventTag(Long id) {
+        dashboardService.deleteEventTag(id);
+        return SysResponse.success();
+    }
+
     @GetMapping("/diaryList")
-    public SysResponse fetchDiaryList(String yearMonth){
+    public SysResponse fetchDiaryList(String yearMonth) {
         List<CalendarDiary> list = dashboardService.getCalendarDiaryList(yearMonth);
         return SysResponse.success(list);
     }
 
-    @PostMapping("/event")
-    public SysResponse postEventTag(@RequestBody CalendarEvent event){
-        dashboardService.saveOrEditEventTag(event);
-        return SysResponse.success();
-    }
-    @DeleteMapping("/event")
-    public SysResponse deleteEventTag(Long id){
-        dashboardService.deleteEventTag(id);
+    @PostMapping("/diary")
+    public SysResponse postDiary(@RequestBody CalendarDiary diary) {
+        log.info("post diary: {}", diary);
+        dashboardService.saveOrEditDiary(diary);
         return SysResponse.success();
     }
 }

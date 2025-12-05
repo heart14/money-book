@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class CalendarDiary {
 
+    private Long id;
+
     private String date;
 
     private String workShift;
