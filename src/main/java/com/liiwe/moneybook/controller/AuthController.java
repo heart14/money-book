@@ -1,6 +1,7 @@
 package com.liiwe.moneybook.controller;
 
 import com.liiwe.moneybook.base.bean.domain.auth.LoginReq;
+import com.liiwe.moneybook.base.bean.domain.auth.RegisterReq;
 import com.liiwe.moneybook.base.bean.domain.user.UserInfo;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.security.JwtUtils;
@@ -64,10 +65,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public SysResponse register(@RequestBody LoginReq loginReq) {
-        log.info("system register: {}", loginReq);
-
-        authService.register(loginReq.getUsername(), loginReq.getPassword());
+    public SysResponse register(@RequestBody RegisterReq req) {
+        log.info("system register: {}", req);
+        authService.register(req);
         return SysResponse.success();
     }
 
