@@ -4,11 +4,13 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.liiwe.moneybook.base.bean.entity.Category;
 import com.liiwe.moneybook.base.bean.entity.Diary;
+import com.liiwe.moneybook.base.bean.entity.EventTag;
 import com.liiwe.moneybook.base.bean.entity.Transaction;
 import com.liiwe.moneybook.base.bean.model.MoneyBookTemplate;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.CategoryMapper;
 import com.liiwe.moneybook.mapper.DiaryMapper;
+import com.liiwe.moneybook.mapper.EventTagMapper;
 import com.liiwe.moneybook.mapper.TransactionMapper;
 import com.liiwe.moneybook.service.biz.DataImportService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,22 +39,56 @@ public class DataImportServiceImpl implements DataImportService {
 
     private final CategoryMapper categoryMapper;
 
-    public DataImportServiceImpl(TransactionMapper transactionMapper, DiaryMapper diaryMapper, CategoryMapper categoryMapper) {
+    private final EventTagMapper eventTagMapper;
+
+    public DataImportServiceImpl(TransactionMapper transactionMapper, DiaryMapper diaryMapper, CategoryMapper categoryMapper, EventTagMapper eventTagMapper) {
         this.transactionMapper = transactionMapper;
         this.diaryMapper = diaryMapper;
         this.categoryMapper = categoryMapper;
+        this.eventTagMapper = eventTagMapper;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void excel(List<MoneyBookTemplate> templateList) {
         List<Diary> diaryList = getDiaryList(templateList);
         List<Transaction> transList = getTransList(templateList);
+        List<EventTag> eventList = getEventList(templateList);
         if (!diaryList.isEmpty()) {
             diaryMapper.batchInsertDiary(diaryList);
         }
         if (!transList.isEmpty()) {
             transactionMapper.batchInsertTransaction(transList);
         }
+        if (!eventList.isEmpty()) {
+            eventTagMapper.batchInsertEventTag(eventList);
+        }
+    }
+
+    private List<EventTag> getEventList(List<MoneyBookTemplate> templateList) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<EventTag> list = new ArrayList<>();
+        // 创建一个临时对象来存储上一条有日期的记录
+        MoneyBookTemplate lastRecord = null;
+        for (MoneyBookTemplate record : templateList) {
+            if (StrUtil.isNotBlank(record.getEventTag())) {
+                // 如果当前记录的日期不为空，则更新 lastRecord 为当前记录
+                if (StrUtil.isNotBlank(record.getDate())) {
+                    lastRecord = record;
+                }
+
+                EventTag event = new EventTag();
+                // 如果当前记录的日期为空，说明这是合并单元格的记录，与 lastRecord 是同一天
+                if (StrUtil.isBlank(record.getDate()) && lastRecord != null) {
+                    event.setDate(lastRecord.getDate().replace(".", "-"));
+                } else {
+                    event.setDate(record.getDate().replace(".", "-"));
+                }
+                event.setContent(record.getEventTag());
+                event.setUsername(name);
+                list.add(event);
+            }
+        }
+        return list;
     }
 
     private List<Diary> getDiaryList(List<MoneyBookTemplate> templateList) {
@@ -63,6 +99,7 @@ public class DataImportServiceImpl implements DataImportService {
                 Diary diary = new Diary();
                 diary.setDate(record.getDate().replace(".", "-"));
                 diary.setContent(record.getDiary());
+                diary.setWorkShift(Constants.workShiftMapping.get(record.getWorkShift()));
                 diary.setUsername(name);
                 list.add(diary);
             }

@@ -21,7 +21,7 @@ public class MoneyBookTemplate {
     private String week;
 
     @ExcelProperty(value = "班次", index = 2)
-    private String workType;
+    private String workShift;
 
     @ExcelProperty(value = "描述", index = 3)
     private String title;
@@ -37,4 +37,7 @@ public class MoneyBookTemplate {
 
     @ExcelProperty(value = "日记", index = 8)
     private String diary;
+
+    @ExcelProperty(value = "摘要", index = 9)
+    private String eventTag;
 }
