@@ -12,4 +12,8 @@ import com.liiwe.moneybook.base.bean.domain.mb.PageRoleReq;
 public interface SysRoleService {
 
     Page<RoleInfo> getRoleList(PageRoleReq req);
+
+    void saveOrEditRole(RoleInfo roleInfo);
+
+    void deleteRole(String roleId);
 }

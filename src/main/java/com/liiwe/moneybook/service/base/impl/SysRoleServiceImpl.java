@@ -49,4 +49,14 @@ public class SysRoleServiceImpl implements SysRoleService {
         result.setCurrent(selectPage.getCurrent());
         return result;
     }
+
+    @Override
+    public void saveOrEditRole(RoleInfo roleInfo) {
+
+    }
+
+    @Override
+    public void deleteRole(String roleId) {
+
+    }
 }
