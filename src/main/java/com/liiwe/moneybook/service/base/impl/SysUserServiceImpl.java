@@ -10,9 +10,11 @@ import com.liiwe.moneybook.mapper.SysRoleMapper;
 import com.liiwe.moneybook.mapper.SysUserMapper;
 import com.liiwe.moneybook.service.base.SysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,5 +77,37 @@ public class SysUserServiceImpl implements SysUserService {
         result.setCurrent(selectPage.getCurrent());
 
         return result;
+    }
+
+    @Override
+    public void saveOrEditUser(UserInfo userInfo) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUid, userInfo.getUid());
+        SysUser selected = userMapper.selectOne(wrapper);
+
+        if (selected == null) {
+            SysUser user = new SysUser();
+            user.setUsername(userInfo.getUsername());
+            user.setNickname(userInfo.getNickname());
+            // 默认密码123456，BCrypt格式加密
+            user.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            userMapper.insert(user);
+            return;
+        }
+        // 页面编辑用户信息时不允许修改其密码
+        selected.setUsername(userInfo.getUsername());
+        selected.setNickname(userInfo.getNickname());
+        userMapper.updateById(selected);
+    }
+
+    @Override
+    public void deleteUser(Long uid) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUid, uid);
+        SysUser selected = userMapper.selectOne(wrapper);
+        if (selected == null) {
+            throw new RuntimeException("删除失败，用户不存在");
+        }
+        userMapper.deleteById(uid);
     }
 }
