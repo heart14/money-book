@@ -6,6 +6,7 @@ import com.liiwe.moneybook.base.bean.entity.SysUser;
 import com.liiwe.moneybook.mapper.SysRoleMapper;
 import com.liiwe.moneybook.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -57,10 +58,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         List<SysRole> sysRoles = roleMapper.selectUserRoleByUid(sysUser.getUid());
-        if (sysRoles != null && !sysRoles.isEmpty()) {
-            for (SysRole sysRole : sysRoles) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + sysRole.getRole().toUpperCase()));
-            }
+        if (sysRoles == null || sysRoles.isEmpty()) {
+            throw new DisabledException("用户角色无权限");
+        }
+
+        for (SysRole sysRole : sysRoles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + sysRole.getRoleCode().toUpperCase()));
         }
 
         log.info("user role info: {}", authorities);

@@ -1,12 +1,17 @@
 package com.liiwe.moneybook.controller;
 
 import com.liiwe.moneybook.base.bean.domain.auth.LoginReq;
-import com.liiwe.moneybook.base.bean.entity.SysUser;
+import com.liiwe.moneybook.base.bean.domain.user.UserInfo;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.base.security.JwtUtils;
+import com.liiwe.moneybook.service.base.SysUserService;
 import com.liiwe.moneybook.service.biz.AuthService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,24 +26,37 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
+
     private final AuthService authService;
 
     private final JwtUtils jwtUtils;
 
-    public AuthController(AuthService authService, JwtUtils jwtUtils) {
+    private final SysUserService userService;
+
+    public AuthController(AuthenticationManager authenticationManager, AuthService authService, JwtUtils jwtUtils, SysUserService userService) {
+        this.authenticationManager = authenticationManager;
         this.authService = authService;
         this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
     public SysResponse login(@RequestBody LoginReq loginReq) {
         log.info("system login: {}", loginReq);
 
-        SysUser sysUser = authService.login(loginReq.getUsername(), loginReq.getPassword());
+        // 通过spring security进行登录认证
+        try {
+            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        // 认证完成的话，查询用户信息用于生成token
+        UserInfo userInfo = userService.getUserInfo(loginReq.getUsername());
 
         Map<String, String> data = new HashMap<>();
-        data.put("token", jwtUtils.generateAccessToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
-        data.put("refreshToken", jwtUtils.generateRefreshToken(String.valueOf(sysUser.getUid()), sysUser.getUsername()));
+        data.put("token", jwtUtils.generateAccessToken(String.valueOf(userInfo.getUid()), userInfo.getUsername()));
+        data.put("refreshToken", jwtUtils.generateRefreshToken(String.valueOf(userInfo.getUid()), userInfo.getUsername()));
 
         // redis存储refreshToken，key规则：refresh_token:uid
 

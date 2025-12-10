@@ -22,20 +22,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public SysUser login(String username, String password) {
-        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUsername, username).eq(SysUser::getPassword, password);
-
-        SysUser sysUser = userMapper.selectOne(wrapper);
-
-        if (sysUser == null) {
-            throw new RuntimeException("用户名或密码错误");
-        }
-
-        return sysUser;
-    }
-
-    @Override
     public void register(String username, String password) {
 
         // 根据username，检查用户是否已存在
