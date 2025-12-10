@@ -6,6 +6,7 @@ import com.liiwe.moneybook.base.bean.domain.mb.PageRoleReq;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.base.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,6 +36,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{roleId}")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER')")
     public SysResponse deleteRole(@PathVariable("roleId") String roleId) {
         log.info("delete role: id={}", roleId);
         return SysResponse.success();
