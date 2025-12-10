@@ -2,10 +2,7 @@ package com.liiwe.moneybook.service.base;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.mb.PageUserReq;
-import com.liiwe.moneybook.base.bean.domain.user.UserInfo;
-import com.liiwe.moneybook.base.bean.entity.SysUser;
-
-import java.util.List;
+import com.liiwe.moneybook.base.bean.domain.manage.UserInfo;
 
 /**
  * @author wfli

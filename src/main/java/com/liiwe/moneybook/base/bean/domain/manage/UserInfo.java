@@ -1,4 +1,4 @@
-package com.liiwe.moneybook.base.bean.domain.user;
+package com.liiwe.moneybook.base.bean.domain.manage;
 
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import lombok.AllArgsConstructor;
