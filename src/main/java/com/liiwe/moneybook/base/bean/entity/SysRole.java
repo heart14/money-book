@@ -5,22 +5,28 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
  * @author wfli
  * @since 2025/6/11 9:13
  */
+@TableName("t_sys_role")
+@EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_sys_role")
-public class SysRole {
+public class SysRole extends BaseEntity{
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String role;
+    private String roleCode;
+
+    private String roleName;
 
     private String roleDesc;
+
+    private int status;
 }

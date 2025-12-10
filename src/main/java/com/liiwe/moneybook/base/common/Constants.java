@@ -66,4 +66,9 @@ public class Constants {
         public static final BigDecimal HUNDRED = new BigDecimal("100");
         public static final BigDecimal THOUSAND = new BigDecimal("1000");
     }
+
+    public static class CommonStatus {
+        public static final int OK = 1;
+        public static final int NO = 0;
+    }
 }

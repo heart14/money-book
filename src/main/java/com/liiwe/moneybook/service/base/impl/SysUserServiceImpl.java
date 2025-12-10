@@ -43,7 +43,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         List<SysRole> sysRoles = roleMapper.selectUserRoleByUid(sysUser.getUid());
         List<String> roles = sysRoles.stream()
-                .map(sysRole -> "R_" + sysRole.getRole().toUpperCase())
+                .map(sysRole -> "R_" + sysRole.getRoleCode().toUpperCase())
                 .toList();
         return new UserInfo(sysUser, roles);
     }
@@ -61,7 +61,7 @@ public class SysUserServiceImpl implements SysUserService {
             for (SysUser record : records) {
                 List<SysRole> sysRoles = roleMapper.selectUserRoleByUid(record.getUid());
                 List<String> roles = sysRoles.stream()
-                        .map(sysRole -> "R_" + sysRole.getRole().toUpperCase())
+                        .map(sysRole -> "R_" + sysRole.getRoleCode().toUpperCase())
                         .toList();
                 UserInfo userInfo = new UserInfo(record, roles);
                 list.add(userInfo);

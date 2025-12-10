@@ -8,6 +8,7 @@
         SELECT *
         FROM t_sys_role
         WHERE id IN (SELECT role_id FROM t_user_role WHERE uid = #{uid})
+        AND status = 1
     </select>
 
 </mapper>
