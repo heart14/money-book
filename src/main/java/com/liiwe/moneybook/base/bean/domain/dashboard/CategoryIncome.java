@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
+ * 分类收入数据
+ *
  * @author lwf14
  * @since 2025/11/25 10:18
  */
@@ -14,6 +16,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryIncome {
+    /**
+     * 分类名
+     */
     private String name;
+    /**
+     * 收入金额
+     */
     private BigDecimal num;
 }

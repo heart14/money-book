@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 日历页面-事件标签数据
+ *
  * @author lwf14
  * @since 2025/12/3 15:05
  */
@@ -13,12 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CalendarEvent {
-
     /**
      * 主键id
      */
     private Long id;
-
     /**
      * 日期
      */
@@ -27,7 +27,6 @@ public class CalendarEvent {
      * 结束日期
      */
     private String endDate;
-
     /**
      * tag事件
      */

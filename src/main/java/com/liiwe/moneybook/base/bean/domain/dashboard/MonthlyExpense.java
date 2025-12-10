@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
+ * 月支出金额数据
+ *
  * @author lwf14
  * @since 2025/11/25 16:12
  */
@@ -14,6 +16,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MonthlyExpense {
-    private String month;        // yyyy-MM
+    /**
+     * 月份，yyyy-MM
+     */
+    private String month;
+    /**
+     * 月总支出金额
+     */
     private BigDecimal totalExpense;
 }
