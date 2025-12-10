@@ -2,7 +2,7 @@ package com.liiwe.moneybook.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
-import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
+import com.liiwe.moneybook.base.bean.domain.mb.PageTransReq;
 import com.liiwe.moneybook.base.bean.dto.TabulateDto;
 import com.liiwe.moneybook.base.bean.model.SysResponse;
 import com.liiwe.moneybook.service.biz.DashboardService;
@@ -63,7 +63,7 @@ public class DashboardController {
     }
 
     @GetMapping("/transDetailList")
-    public SysResponse fetchTransDetailList(PageListReq req) {
+    public SysResponse fetchTransDetailList(PageTransReq req) {
         Page<TransDetail> pageList = dashboardService.getTransDetailPageList(req);
         return SysResponse.success(pageList);
     }

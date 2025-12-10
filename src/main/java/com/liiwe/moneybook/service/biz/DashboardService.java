@@ -2,7 +2,7 @@ package com.liiwe.moneybook.service.biz;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
-import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
+import com.liiwe.moneybook.base.bean.domain.mb.PageTransReq;
 import com.liiwe.moneybook.base.bean.dto.TabulateDto;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface DashboardService {
 
     List<LargeConsume> getLargeConsume(String year);
 
-    Page<TransDetail> getTransDetailPageList(PageListReq req);
+    Page<TransDetail> getTransDetailPageList(PageTransReq req);
 
     void saveOrEditTransDetail(TransDetail detail);
 

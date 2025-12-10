@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.dashboard.*;
-import com.liiwe.moneybook.base.bean.domain.mb.PageListReq;
+import com.liiwe.moneybook.base.bean.domain.mb.PageTransReq;
 import com.liiwe.moneybook.base.bean.dto.*;
 import com.liiwe.moneybook.base.bean.entity.Category;
 import com.liiwe.moneybook.base.bean.entity.Diary;
@@ -161,7 +161,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public Page<TransDetail> getTransDetailPageList(PageListReq req) {
+    public Page<TransDetail> getTransDetailPageList(PageTransReq req) {
         // 获取当前登录用户的用户名
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
