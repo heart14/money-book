@@ -41,6 +41,7 @@ public class Constants {
             put("早班", "EARLY");
             put("白班", "DAY");
             put("晚班", "NIGHT");
+            put("封控", "COVID");
         }
     };
 

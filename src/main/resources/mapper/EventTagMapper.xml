@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liiwe.moneybook.mapper.EventTagMapper">
+
+    <insert id="batchInsertEventTag" parameterType="java.util.List">
+        INSERT INTO t_event_tag
+        (`date`,`end_date`,`content`,`username`,`create_at`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.date}, #{item.endDate}, #{item.content}, #{item.username}, now())
+        </foreach>
+    </insert>
+
+</mapper>

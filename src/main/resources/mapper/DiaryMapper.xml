@@ -4,10 +4,10 @@
 <mapper namespace="com.liiwe.moneybook.mapper.DiaryMapper">
 
     <insert id="batchInsertDiary" parameterType="java.util.List">
-        INSERT INTO t_diary (`date`,`content`,`username`,`create_at`)
+        INSERT INTO t_diary (`date`,`content`,`work_shift`,`username`,`create_at`)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.date}, #{item.content}, #{item.username}, now())
+            (#{item.date}, #{item.content}, #{item.workShift}, #{item.username}, now())
         </foreach>
     </insert>
 
