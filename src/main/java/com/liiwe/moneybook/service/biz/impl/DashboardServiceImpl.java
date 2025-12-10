@@ -257,7 +257,7 @@ public class DashboardServiceImpl implements DashboardService {
             return;
         }
         Transaction selected = transactionMapper.selectById(detail.getId());
-        if (!selected.getUsername().equals(detail.getUsername())) {
+        if (!name.equals(selected.getUsername())) {
             throw new RuntimeException("无法修改其它用户数据");
         }
         selected.setTitle(detail.getTitle());
