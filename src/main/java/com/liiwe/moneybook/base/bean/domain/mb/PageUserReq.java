@@ -12,13 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageUserReq {
-
+    /**
+     * 当前页数
+     */
     private int current;
-
+    /**
+     * 每页数据
+     */
     private int size;
-
+    /**
+     * 用户账号
+     */
     private String username;
-
+    /**
+     * 用户昵称
+     */
     private String nickname;
-
 }
