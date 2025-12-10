@@ -24,6 +24,12 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    /**
+     * 分页查询角色列表
+     *
+     * @param req 分页查询参数
+     * @return SysResponse
+     */
     @GetMapping("/list")
     public SysResponse getRoleList(PageRoleReq req) {
         Page<RoleInfo> list = roleService.getRoleList(req);
