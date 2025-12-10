@@ -3,10 +3,13 @@ package com.liiwe.moneybook.base.bean.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.liiwe.moneybook.base.bean.domain.manage.RoleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @author wfli
@@ -29,4 +32,13 @@ public class SysRole extends BaseEntity{
     private String roleDesc;
 
     private int status;
+
+    public SysRole(RoleInfo roleInfo){
+        this.id = roleInfo.getId();
+        this.roleCode = roleInfo.getRoleCode();
+        this.roleName = roleInfo.getRoleName();
+        this.roleDesc = roleInfo.getRoleDesc();
+        this.status = roleInfo.getStatus();
+        this.setCreateAt(new Date());
+    }
 }

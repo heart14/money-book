@@ -54,7 +54,21 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public void saveOrEditRole(RoleInfo roleInfo) {
+        LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRole::getId, roleInfo.getId());
+        SysRole selected = roleMapper.selectOne(wrapper);
 
+        if (selected == null) {
+            SysRole role = new SysRole(roleInfo);
+            roleMapper.insert(role);
+            return;
+        }
+        selected.setRoleName(roleInfo.getRoleName());
+        selected.setRoleCode(roleInfo.getRoleCode());
+        selected.setRoleDesc(roleInfo.getRoleDesc());
+        selected.setStatus(roleInfo.getStatus());
+        selected.setUpdateAt(new Date());
+        roleMapper.updateById(selected);
     }
 
     @Override

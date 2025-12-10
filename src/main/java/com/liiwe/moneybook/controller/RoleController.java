@@ -30,8 +30,15 @@ public class RoleController {
         return SysResponse.success(list);
     }
 
+    /**
+     * 保存或编辑角色
+     *
+     * @param role 角色信息
+     * @return SysResponse
+     */
     @PostMapping
     public SysResponse postRole(@RequestBody RoleInfo role) {
+        roleService.saveOrEditRole(role);
         return SysResponse.success();
     }
 
