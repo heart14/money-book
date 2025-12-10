@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.manage.RoleInfo;
 import com.liiwe.moneybook.base.bean.domain.mb.PageRoleReq;
 import com.liiwe.moneybook.base.bean.entity.SysRole;
+import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.SysRoleMapper;
 import com.liiwe.moneybook.service.base.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,7 +58,16 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public void deleteRole(String roleId) {
+    public void deleteRole(Long id) {
+        LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRole::getId, id);
+        SysRole selected = roleMapper.selectOne(wrapper);
+        if (selected == null) {
+            throw new RuntimeException("禁用失败，角色不存在");
+        }
+        selected.setStatus(Constants.CommonStatus.NO);
+        selected.setUpdateAt(new Date());
 
+        roleMapper.updateById(selected);
     }
 }

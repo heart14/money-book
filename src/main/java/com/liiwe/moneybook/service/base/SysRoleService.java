@@ -15,5 +15,5 @@ public interface SysRoleService {
 
     void saveOrEditRole(RoleInfo roleInfo);
 
-    void deleteRole(String roleId);
+    void deleteRole(Long id);
 }
