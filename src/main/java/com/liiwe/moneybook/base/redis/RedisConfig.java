@@ -1,0 +1,18 @@
+package com.liiwe.moneybook.base.redis;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+/**
+ * @author lwf14
+ * @since 2025/12/11 18:40
+ */
+@Configuration
+public class RedisConfig {
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
+        return new StringRedisTemplate(factory);
+    }
+}
