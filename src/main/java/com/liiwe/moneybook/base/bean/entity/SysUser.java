@@ -3,6 +3,7 @@ package com.liiwe.moneybook.base.bean.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.liiwe.moneybook.base.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,13 @@ public class SysUser {
 
     private String nickname;
 
+    private Integer status;
+
     public SysUser(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+        this.status = Constants.UserStatus.NORMAL;
     }
 
 }

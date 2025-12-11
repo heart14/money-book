@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author wfli
@@ -53,6 +54,7 @@ public class JwtUtils {
      */
     public String generateAccessToken(String uid, String username) {
         return Jwts.builder()
+                .id(UUID.randomUUID().toString()) // jti
                 .subject(uid)
                 .issuer(username)
                 .issuedAt(new Date())
@@ -70,6 +72,7 @@ public class JwtUtils {
      */
     public String generateRefreshToken(String uid, String username) {
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(uid)
                 .issuer(username)
                 .issuedAt(new Date())
@@ -93,7 +96,21 @@ public class JwtUtils {
      * @param token
      * @return
      */
-    public Claims parseToken(String token) {
+    public Claims parseAccessToken(String token) {
+        return Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getPayload();
+        /*
+        当token过期时，解析失败，报错io.jsonwebtoken.ExpiredJwtException: JWT expired 1491 milliseconds ago at ...
+        所以此方法也可用来判断token是否已过期
+         */
+    }
+
+    /**
+     * 解析REFRESH TOKEN
+     *
+     * @param token
+     * @return
+     */
+    public Claims parseRefreshToken(String token) {
         return Jwts.parser().verifyWith(generateKey()).build().parseSignedClaims(token).getPayload();
         /*
         当token过期时，解析失败，报错io.jsonwebtoken.ExpiredJwtException: JWT expired 1491 milliseconds ago at ...

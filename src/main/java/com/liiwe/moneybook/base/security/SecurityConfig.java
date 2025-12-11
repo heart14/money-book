@@ -32,12 +32,18 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthEntryPoint jwtAuthEntryPoint; // JWT认证入口点
-
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler; // JWT鉴权处理器
     private final JwtAuthenticationFilter jwtAuthenticationFilter; // JWT认证过滤器
+    private final JwtRefreshTokenFilter jwtRefreshTokenFilter; // 刷新token过滤器
 
-    public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint,
+                          JwtAccessDeniedHandler jwtAccessDeniedHandler,
+                          JwtAuthenticationFilter jwtAuthenticationFilter,
+                          JwtRefreshTokenFilter jwtRefreshTokenFilter) {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint; // 注入JWT认证入口点
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter; // 注入JWT认证过滤器
+        this.jwtRefreshTokenFilter = jwtRefreshTokenFilter;
     }
 
     @Bean // 定义一个Bean，返回SecurityFilterChain对象
@@ -45,7 +51,9 @@ public class SecurityConfig {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 配置跨域资源共享(CORS)
                 .csrf(AbstractHttpConfigurer::disable) // 禁用CSRF保护
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint)) // 设置未授权访问的处理入口点
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler)) // 设置未授权访问的处理入口点
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 设置会话管理策略为无状态
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // 放行所有以"/auth/"开头的请求
@@ -53,8 +61,9 @@ public class SecurityConfig {
                         .requestMatchers("/sys/screen").permitAll() // 放行手机上送的请求
                         .anyRequest().authenticated() // 其他所有请求都需要认证
                 );
-        // 在UsernamePasswordAuthenticationFilter之前添加JWT认证过滤器
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 在UsernamePasswordAuthenticationFilter之前添加JWT认证过滤器
+                .addFilterBefore(jwtRefreshTokenFilter, JwtAuthenticationFilter.class); // 在jwtAuthenticationFilter之前添加刷新TOKEN过滤器
         return httpSecurity.build(); // 构建并返回SecurityFilterChain对象
     }
 
