@@ -46,29 +46,55 @@ public class Constants {
     };
 
     public static class TransType {
+        // 收支
         public static final int BOTH = 3;
+        // 支出
         public static final int EXPENSE = 2;
+        // 收入
         public static final int INCOME = 1;
     }
 
     public static class CategoryLevel {
+        // 一级分类
         public static final int LEVEL_1 = 1;
+        // 二级分类
         public static final int LEVEL_2 = 2;
     }
 
     public static class IsDeleted {
+        // 是否删除：否
         public static final int FALSE = 0;
+        // 是否删除：是
         public static final int TRUE = 1;
     }
 
     public static class DecimalNumber {
+        // BigDecimal常量0
         public static final BigDecimal ZERO = new BigDecimal("0");
+        // BigDecimal常量100
         public static final BigDecimal HUNDRED = new BigDecimal("100");
+        // BigDecimal常量1000
         public static final BigDecimal THOUSAND = new BigDecimal("1000");
     }
 
     public static class CommonStatus {
-        public static final int OK = 1;
         public static final int NO = 0;
+        public static final int OK = 1;
+    }
+
+    public static class UserStatus {
+        // 异常
+        public static final int ABNORMAL = 0;
+        // 正常
+        public static final int NORMAL = 1;
+        // 注销
+        public static final int CANCELED = 2;
+    }
+
+    public static class OnlineStatus {
+        // 离线
+        public static final int OFFLINE = 0;
+        // 在线
+        public static final int ONLINE = 1;
     }
 }
