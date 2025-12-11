@@ -77,11 +77,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         wrapper.eq(SysRole::getId, id);
         SysRole selected = roleMapper.selectOne(wrapper);
         if (selected == null) {
-            throw new RuntimeException("禁用失败，角色不存在");
+            throw new RuntimeException("删除失败，角色不存在");
         }
-        selected.setStatus(Constants.CommonStatus.NO);
-        selected.setUpdateAt(new Date());
-
-        roleMapper.updateById(selected);
+//        selected.setStatus(Constants.CommonStatus.NO);
+//        selected.setUpdateAt(new Date());
+//        roleMapper.updateById(selected);
+        roleMapper.deleteById(id);
     }
 }

@@ -49,16 +49,16 @@ public class RoleController {
     }
 
     /**
-     * 禁用角色
+     * 删除角色
      *
-     * @param roleId 角色id
+     * @param id 角色id
      * @return SysResponse
      */
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ADMIN','SUPER')")
-    public SysResponse deleteRole(Long roleId) {
-        log.info("delete role: id={}", roleId);
-        roleService.deleteRole(roleId);
+    public SysResponse deleteRole(Long id) {
+        log.info("delete role: id={}", id);
+        roleService.deleteRole(id);
         return SysResponse.success();
     }
 }
