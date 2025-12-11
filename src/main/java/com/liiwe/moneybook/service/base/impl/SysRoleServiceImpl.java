@@ -1,5 +1,6 @@
 package com.liiwe.moneybook.service.base.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.liiwe.moneybook.base.bean.domain.manage.RoleInfo;
@@ -33,6 +34,24 @@ public class SysRoleServiceImpl implements SysRoleService {
     public Page<RoleInfo> getRoleList(PageRoleReq req) {
         Page<SysRole> page = new Page<>(req.getCurrent(), req.getSize());
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        if (!StrUtil.isEmpty(req.getRoleName())) {
+            wrapper.like(SysRole::getRoleName, req.getRoleName());
+        }
+        if (!StrUtil.isEmpty(req.getRoleCode())) {
+            wrapper.like(SysRole::getRoleCode, req.getRoleCode());
+        }
+        if (!StrUtil.isEmpty(req.getRoleDesc())) {
+            wrapper.like(SysRole::getRoleDesc, req.getRoleDesc());
+        }
+        if (req.getStatus() != null) {
+            wrapper.eq(SysRole::getStatus, req.getStatus());
+        }
+        if (!StrUtil.isEmpty(req.getStartTime())) {
+            wrapper.ge(SysRole::getCreateAt, req.getStartTime());
+        }
+        if (!StrUtil.isEmpty(req.getEndTime())) {
+            wrapper.le(SysRole::getCreateAt, req.getEndTime());
+        }
 
         Page<SysRole> selectPage = roleMapper.selectPage(page, wrapper);
         List<RoleInfo> list = new ArrayList<>();

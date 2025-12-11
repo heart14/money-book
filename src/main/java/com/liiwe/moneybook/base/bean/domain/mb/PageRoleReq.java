@@ -1,8 +1,11 @@
 package com.liiwe.moneybook.base.bean.domain.mb;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @author lwf14
@@ -32,4 +35,16 @@ public class PageRoleReq {
      * 角色描述
      */
     private String roleDesc;
+    /**
+     * 状态
+     */
+    private Integer status;
+    /**
+     * 创建日期start
+     */
+    private String startTime;
+    /**
+     * 创建日期end
+     */
+    private String endTime;
 }
