@@ -6,17 +6,21 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.liiwe.moneybook.base.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @author wfli
  * @since 2025/6/9 17:21
  */
 @TableName("t_sys_user")
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SysUser {
+public class SysUser extends BaseEntity{
 
     @TableId(value = "uid", type = IdType.AUTO)
     private Long uid;
@@ -34,6 +38,7 @@ public class SysUser {
         this.password = password;
         this.nickname = nickname;
         this.status = Constants.UserStatus.NORMAL;
+        this.setCreateAt(new Date());
     }
 
 }

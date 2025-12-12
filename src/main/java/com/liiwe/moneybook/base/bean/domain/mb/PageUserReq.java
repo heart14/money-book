@@ -28,4 +28,8 @@ public class PageUserReq {
      * 用户昵称
      */
     private String nickname;
+    /**
+     * 状态
+     */
+    private Integer status;
 }

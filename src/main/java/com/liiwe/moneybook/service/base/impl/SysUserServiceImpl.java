@@ -1,9 +1,10 @@
 package com.liiwe.moneybook.service.base.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.liiwe.moneybook.base.bean.domain.mb.PageUserReq;
 import com.liiwe.moneybook.base.bean.domain.manage.UserInfo;
+import com.liiwe.moneybook.base.bean.domain.mb.PageUserReq;
 import com.liiwe.moneybook.base.bean.entity.SysRole;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
 import com.liiwe.moneybook.mapper.SysRoleMapper;
@@ -55,6 +56,15 @@ public class SysUserServiceImpl implements SysUserService {
 
         Page<SysUser> page = new Page<>(req.getCurrent(), req.getSize());
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        if (!StrUtil.isEmpty(req.getUsername())) {
+            wrapper.like(SysUser::getUsername, req.getUsername());
+        }
+        if (!StrUtil.isEmpty(req.getNickname())) {
+            wrapper.like(SysUser::getNickname, req.getNickname());
+        }
+        if (req.getStatus() != null) {
+            wrapper.eq(SysUser::getStatus, req.getStatus());
+        }
         Page<SysUser> selectPage = userMapper.selectPage(page, wrapper);
         List<SysUser> records = selectPage.getRecords();
 
@@ -97,6 +107,7 @@ public class SysUserServiceImpl implements SysUserService {
         // 页面编辑用户信息时不允许修改其密码
         selected.setUsername(userInfo.getUsername());
         selected.setNickname(userInfo.getNickname());
+        selected.setUpdateAt(new Date());
         userMapper.updateById(selected);
     }
 
