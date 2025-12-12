@@ -51,6 +51,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        // 如果是刷新token请求，直接放行，继续执行后续过滤链，因为前面已经有JwtRefreshTokenFilter对刷新请求进行处理了
+        if ("/auth/refresh".equals(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 获取请求头中的Authorization字段
         final String authorization = request.getHeader("Authorization");
         // 检查Authorization字段是否存在且以"Bearer "开头
@@ -82,16 +88,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         final String username = claims.getIssuer();
 
-        // 从JWT令牌中提取用户名
-//        final String username = jwtUtils.extractUsernameFromToken(jwtToken);
-
         // 检查用户名是否为空且当前安全上下文中没有认证信息
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 记录日志
             log.info("do loadUserByUsername");
             // 根据用户名加载用户详细信息
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
             // 创建认证令牌
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             // 设置认证详情
