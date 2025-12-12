@@ -7,13 +7,16 @@ import com.liiwe.moneybook.base.bean.domain.manage.UserInfo;
 import com.liiwe.moneybook.base.bean.domain.mb.PageUserReq;
 import com.liiwe.moneybook.base.bean.entity.SysRole;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
+import com.liiwe.moneybook.base.bean.entity.SysUserRole;
 import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.SysRoleMapper;
 import com.liiwe.moneybook.mapper.SysUserMapper;
+import com.liiwe.moneybook.mapper.SysUserRoleMapper;
 import com.liiwe.moneybook.service.base.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,9 +34,12 @@ public class SysUserServiceImpl implements SysUserService {
 
     private final SysRoleMapper roleMapper;
 
-    public SysUserServiceImpl(SysUserMapper userMapper, SysRoleMapper roleMapper) {
+    private final SysUserRoleMapper userRoleMapper;
+
+    public SysUserServiceImpl(SysUserMapper userMapper, SysRoleMapper roleMapper, SysUserRoleMapper userRoleMapper) {
         this.userMapper = userMapper;
         this.roleMapper = roleMapper;
+        this.userRoleMapper = userRoleMapper;
     }
 
     @Override
@@ -91,12 +97,18 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveOrEditUser(UserInfo userInfo) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUid, userInfo.getUid());
         SysUser selected = userMapper.selectOne(wrapper);
 
         if (selected == null) {
+            SysUser selectOne = userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, userInfo.getUsername()));
+            if (selectOne != null) {
+                throw new RuntimeException("用户账号重复");
+            }
+            // 保存用户信息
             SysUser user = new SysUser();
             user.setUsername(userInfo.getUsername());
             user.setNickname(userInfo.getNickname());
@@ -105,6 +117,26 @@ public class SysUserServiceImpl implements SysUserService {
             user.setCreateAt(new Date());
             user.setStatus(Constants.UserStatus.NORMAL);
             userMapper.insert(user);
+
+            // 如果上送的userInfo里面包含角色信息，则进行保存角色关联
+            List<String> roles = userInfo.getRoles();
+            if (roles != null && !roles.isEmpty()) {
+                // 删除原角色关联
+
+                // 保存新的角色关联
+                for (String role : roles) {
+                    String replaced = role.replace("R_", "");
+                    SysRole sysRole = roleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleCode, replaced));
+                    if (sysRole != null) {
+                        SysUserRole userRole = new SysUserRole();
+                        userRole.setUid(user.getUid());
+                        userRole.setRoleId(sysRole.getId());
+                        userRoleMapper.insert(userRole);
+                    } else {
+                        log.error("role code [{}] invalid", replaced);
+                    }
+                }
+            }
             return;
         }
         // 页面编辑用户信息时不允许修改其密码
@@ -113,6 +145,30 @@ public class SysUserServiceImpl implements SysUserService {
         selected.setStatus(userInfo.getStatus());
         selected.setUpdateAt(new Date());
         userMapper.updateById(selected);
+
+        // 如果上送的userInfo里面包含角色信息，则更新角色关联
+        List<String> roles = userInfo.getRoles();
+        if (roles != null && !roles.isEmpty()) {
+            // 删除原角色关联
+            userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUid, selected.getUid()));
+
+            // 保存新的角色关联
+            for (String role : roles) {
+                String replaced = role.replace("R_", "");
+                SysRole sysRole = roleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleCode, replaced));
+                if (sysRole != null) {
+                    SysUserRole userRole = new SysUserRole();
+                    userRole.setUid(selected.getUid());
+                    userRole.setRoleId(sysRole.getId());
+                    userRoleMapper.insert(userRole);
+                } else {
+                    log.error("role code [{}] invalid", replaced);
+                }
+            }
+        } else {
+            // 删除原角色关联
+            userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUid, selected.getUid()));
+        }
     }
 
     @Override
