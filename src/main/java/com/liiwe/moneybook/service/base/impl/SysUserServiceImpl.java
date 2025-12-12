@@ -7,6 +7,7 @@ import com.liiwe.moneybook.base.bean.domain.manage.UserInfo;
 import com.liiwe.moneybook.base.bean.domain.mb.PageUserReq;
 import com.liiwe.moneybook.base.bean.entity.SysRole;
 import com.liiwe.moneybook.base.bean.entity.SysUser;
+import com.liiwe.moneybook.base.common.Constants;
 import com.liiwe.moneybook.mapper.SysRoleMapper;
 import com.liiwe.moneybook.mapper.SysUserMapper;
 import com.liiwe.moneybook.service.base.SysUserService;
@@ -101,12 +102,15 @@ public class SysUserServiceImpl implements SysUserService {
             user.setNickname(userInfo.getNickname());
             // 默认密码123456，BCrypt格式加密
             user.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            user.setCreateAt(new Date());
+            user.setStatus(Constants.UserStatus.NORMAL);
             userMapper.insert(user);
             return;
         }
         // 页面编辑用户信息时不允许修改其密码
         selected.setUsername(userInfo.getUsername());
         selected.setNickname(userInfo.getNickname());
+        selected.setStatus(userInfo.getStatus());
         selected.setUpdateAt(new Date());
         userMapper.updateById(selected);
     }
