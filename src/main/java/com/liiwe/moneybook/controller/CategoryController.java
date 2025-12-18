@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping(("/category"))
 @Slf4j
 public class CategoryController {
-
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -32,4 +31,10 @@ public class CategoryController {
         return SysResponse.success(list);
     }
 
+    @GetMapping("/tree")
+    public SysResponse fetchTreeList() {
+        log.info("fetch tree list");
+        List<Category> treeList = categoryService.getTreeList();
+        return SysResponse.success(treeList);
+    }
 }

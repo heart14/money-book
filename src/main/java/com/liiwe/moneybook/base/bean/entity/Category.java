@@ -1,11 +1,15 @@
 package com.liiwe.moneybook.base.bean.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lwf14
@@ -52,4 +56,11 @@ public class Category {
      * 是否删除，0-否，1-是
      */
     private Integer isDeleted;
+
+    /**
+     * 子分类，非数据库表中字段
+     */
+    @TableField(exist = false)
+    private List<Category> children = new ArrayList<>();
+    ;
 }

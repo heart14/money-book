@@ -12,4 +12,6 @@ import java.util.List;
 public interface CategoryService {
 
     List<Category> getCategoryList(CategoryReq req);
+
+    List<Category> getTreeList();
 }
