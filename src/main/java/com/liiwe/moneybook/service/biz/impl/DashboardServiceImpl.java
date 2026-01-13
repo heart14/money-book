@@ -95,17 +95,17 @@ public class DashboardServiceImpl implements DashboardService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         // 默认查当年数据
         String currentYear = StrUtil.isEmpty(year) ? String.valueOf(DateUtil.year(new Date())) : year;
-        YearlyStatCardDto dto = transactionMapper.statCardData(name, currentYear);
+        YearlyStatCardDto dto = getResultDto(transactionMapper.statCardData(name, currentYear));
 
         DateTime offset = DateUtil.parse(currentYear + "0101").offset(DateField.YEAR, -1);
         String lastYear = String.valueOf(offset.getField(DateField.YEAR));
 
-        YearlyStatCardDto lastDto = transactionMapper.statCardData(name, lastYear);
+        YearlyStatCardDto lastDto = getResultDto(transactionMapper.statCardData(name, lastYear));
 
-        StatCard card1 = new StatCard("总收入", dto.getTotalIncome(), (lastDto == null) ? "+100%" : percent(dto.getTotalIncome(), lastDto.getTotalIncome()));
-        StatCard card2 = new StatCard("总支出", dto.getTotalExpense(), (lastDto == null) ? "+100%" : percent(dto.getTotalExpense(), lastDto.getTotalExpense()));
-        StatCard card3 = new StatCard("总结余", dto.getTotalIncome().subtract(dto.getTotalExpense()), (lastDto == null) ? "+100%" : percent(dto.getTotalIncome().subtract(dto.getTotalExpense()), lastDto.getTotalIncome().subtract(lastDto.getTotalExpense())));
-        StatCard card4 = new StatCard("总收支共项", dto.getTotalBoth(), (lastDto == null) ? "+100%" : percent(dto.getTotalBoth(), lastDto.getTotalBoth()));
+        StatCard card1 = new StatCard("总收入", dto.getTotalIncome(),  percent(dto.getTotalIncome(), lastDto.getTotalIncome()));
+        StatCard card2 = new StatCard("总支出", dto.getTotalExpense(), percent(dto.getTotalExpense(), lastDto.getTotalExpense()));
+        StatCard card3 = new StatCard("总结余", dto.getTotalIncome().subtract(dto.getTotalExpense()),  percent(dto.getTotalIncome().subtract(dto.getTotalExpense()), lastDto.getTotalIncome().subtract(lastDto.getTotalExpense())));
+        StatCard card4 = new StatCard("总收支共项", dto.getTotalBoth(),  percent(dto.getTotalBoth(), lastDto.getTotalBoth()));
 
         List<StatCard> list = new ArrayList<>();
         list.add(card1);
@@ -394,10 +394,10 @@ public class DashboardServiceImpl implements DashboardService {
      * @return 增长百分比
      */
     private String percent(BigDecimal current, BigDecimal last) {
-        if (current.compareTo(Constants.DecimalNumber.ZERO) == 0) {
+        if (current.compareTo(BigDecimal.ZERO) == 0) {
             return "+0%";
         }
-        if (last.compareTo(Constants.DecimalNumber.ZERO) == 0) {
+        if (last.compareTo(BigDecimal.ZERO) == 0) {
             return "+100%";
         }
         BigDecimal subtract = current.subtract(last);
@@ -424,5 +424,28 @@ public class DashboardServiceImpl implements DashboardService {
         // 格式化日期为yyyy-MM-dd
         DateTime parse = DateUtil.parse(date);
         return DateUtil.format(parse, "yyyy-MM-dd");
+    }
+
+    /**
+     * 空值处理
+     * @param dto sql查询结果
+     * @return YearlyStatCardDto
+     */
+    private YearlyStatCardDto getResultDto(YearlyStatCardDto dto){
+        if (dto == null) {
+            return emptyDto();
+        } else return dto;
+    }
+
+    /**
+     * 创建值为0的对象
+     * @return YearlyStatCardDto
+     */
+    private YearlyStatCardDto emptyDto(){
+        YearlyStatCardDto e = new YearlyStatCardDto();
+        e.setTotalIncome(Constants.DecimalNumber.ZERO);
+        e.setTotalExpense(Constants.DecimalNumber.ZERO);
+        e.setTotalBoth(Constants.DecimalNumber.ZERO);
+        return e;
     }
 }
